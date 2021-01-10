@@ -31,7 +31,7 @@
 
  */
 
-
+const URL_WP_CUSTOMIZE = '/wp-json/ft/v1/';
 const String URL_STORE_API_PATH = '/wp-json/wc/store/';
 const URL_JWT_BASE = '/wp-json/jwt-auth/v1';
 const URL_JWT_TOKEN = '$URL_JWT_BASE/token';

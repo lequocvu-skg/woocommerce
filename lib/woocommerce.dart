@@ -1095,6 +1095,13 @@ class WooCommerce{
     return WooOrder.fromJson(response);
   }
 
+  Future<WooOrder> createOrderCustomize (WooOrderPayload orderPayload) async{
+    _printToLog('Creating Order With Payload : ' + orderPayload.toString());
+    _setApiResourceUrl(path: 'order/create-order', isCustomize: true);
+    final response = await post(queryUri.toString(), orderPayload.toJson());
+    return WooOrder.fromJson(response);
+  }
+
   /// Returns a list of all [Order], with filter options.
   ///
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#orders
@@ -1598,16 +1605,19 @@ class WooCommerce{
     @required String path,
     String host, port, queryParameters,
     bool isShop = false,
+    bool isCustomize = false
   }) {
     this.apiPath = DEFAULT_WC_API_PATH;
     if(isShop){
       this.apiPath = URL_STORE_API_PATH;
     }
-    else{
+    else if (isCustomize) {
+      this.apiPath = URL_WP_CUSTOMIZE;
+    } else {
       this.apiPath = DEFAULT_WC_API_PATH;
     }
     //List<Map>param = [];
-   // queryParameters.forEach((k, v) => param.add({k : v})); print(param.toString());
+    // queryParameters.forEach((k, v) => param.add({k : v})); print(param.toString());
     getAuthTokenFromDb();
     queryUri = new Uri(path: path, queryParameters: queryParameters, port: port, host: host );
 
