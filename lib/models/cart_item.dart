@@ -31,6 +31,10 @@
 
  */
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'cart_item.g.dart';
+
 class WooCartItem {
   String key;
   int id;
@@ -137,4 +141,41 @@ class WooCartItemImages {
     data['alt'] = this.alt;
     return data;
   }
+}
+
+@JsonSerializable()
+class WooCartLine {
+  String key;
+  @JsonKey(name: 'product_id')
+  int productId;
+  @JsonKey(name: 'variation_id')
+  int variationId;
+  dynamic variation;
+  int quantity;
+  @JsonKey(name: 'data_hash')
+  String dataHash;
+  @JsonKey(name: 'line_tax_data')
+  dynamic lineTaxData;
+  @JsonKey(name: 'line_subtotal')
+  int lineSubtotal;
+  @JsonKey(name: 'line_subtotal_tax')
+  int lineSubtotalTax;
+  @JsonKey(name: 'line_total')
+  int lineTotal;
+  @JsonKey(name: 'line_tax')
+  int lineTax;
+  dynamic data;
+  @JsonKey(name: 'product_name')
+  String productName;
+  @JsonKey(name: 'product_image')
+  String productImage;
+
+
+  WooCartLine({this.key, this.productId, this.variationId, this.variation,
+  this.quantity, this.dataHash, this.lineTaxData, this.lineSubtotal, this.lineSubtotalTax,
+  this.lineTotal, this.lineTax, this.data, this.productName, this.productImage});
+
+  factory WooCartLine.fromJson(Map<String, dynamic> json) =>
+      _$WooCartLineFromJson(json);
+  Map<String, dynamic> toJson() => _$WooCartLineToJson(this);
 }

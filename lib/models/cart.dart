@@ -31,6 +31,10 @@
 
  */
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'cart.g.dart';
+
 class WooCart {
   String currency;
   int itemCount;
@@ -175,4 +179,49 @@ class WooCartImages {
     data['alt'] = this.alt;
     return data;
   }
+}
+
+
+
+@JsonSerializable()
+class WooSimpleItemParam {
+  @JsonKey(name: 'product_id')
+  String productId;
+  int quantity;
+
+  WooSimpleItemParam({this.productId, this.quantity});
+
+  factory WooSimpleItemParam.fromJson(Map<String, dynamic> json) =>
+      _$WooSimpleItemParamFromJson(json);
+  Map<String, dynamic> toJson() => _$WooSimpleItemParamToJson(this);
+}
+
+@JsonSerializable()
+class WooVariantItemParam {
+  @JsonKey(name: 'product_id')
+  String productId;
+  @JsonKey(name: 'variation_id')
+  int variationId;
+  int quantity;
+
+  WooVariantItemParam({this.productId, this.variationId, this.quantity});
+
+  factory WooVariantItemParam.fromJson(Map<String, dynamic> json) =>
+      _$WooVariantItemParamFromJson(json);
+  Map<String, dynamic> toJson() => _$WooVariantItemParamToJson(this);
+}
+
+
+@JsonSerializable()
+class WooUpdateCartItemParam {
+
+  @JsonKey(name: 'cart_item_key')
+  String cartItemKey;
+  int quantity;
+
+  WooUpdateCartItemParam({this.cartItemKey, this.quantity});
+
+  factory WooUpdateCartItemParam.fromJson(Map<String, dynamic> json) =>
+      _$WooUpdateCartItemParamFromJson(json);
+  Map<String, dynamic> toJson() => _$WooUpdateCartItemParamToJson(this);
 }

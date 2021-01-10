@@ -47,6 +47,7 @@ import 'package:http/http.dart' as http;
 import 'package:woocommerce/models/customer_download.dart';
 import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
+import 'package:woocommerce/models/woo_base.dart';
 import 'models/cart_item.dart';
 import 'woocommerce_error.dart';
 import 'models/cart.dart';
@@ -1081,9 +1082,81 @@ class WooCommerce{
       WooCommerceError.fromJson(json.decode(response.body));
       throw err;
     }
-
   }
 
+  Future<WooBaseResponse> addItemToCart({@required String id,
+    @required int quantity, int variationId}) async {
+    Map<String, dynamic> data = {
+      "product_id": id,
+      "quantity": quantity
+    };
+    if(variationId != null) data['variation_id'] = variationId;
+    _setApiResourceUrl(path: 'cart/add-to-cart', isCustomize: true);
+    final response = await post(queryUri.toString(), data);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final jsonStr = json.decode(response.body);
+      _printToLog('added to my cart : '+jsonStr.toString());
+      return WooBaseResponse.fromJson(jsonStr);
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
+  }
+
+  Future<WooBaseResponse> updateCartItem({@required String key, @required int quantity}) async {
+    Map<String, dynamic> data = {
+      "cart_item_key": key,
+      "quantity": quantity
+    };
+    _setApiResourceUrl(path: 'cart/update-item-cart', isCustomize: true);
+    final response = await post(queryUri.toString(), data);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final jsonStr = json.decode(response.body);
+      _printToLog('added to my cart : '+jsonStr.toString());
+      return WooBaseResponse.fromJson(jsonStr);
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
+  }
+
+  Future<WooBaseResponse> clearCart() async {
+    _setApiResourceUrl(path: 'cart/clear-cart', isCustomize: true);
+    final response = await post(queryUri.toString(), {});
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final jsonStr = json.decode(response.body);
+      _printToLog('added to my cart : '+jsonStr.toString());
+      return WooBaseResponse.fromJson(jsonStr);
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
+  }
+
+  Future<List<WooCartLine>> getCart() async {
+    _setApiResourceUrl(
+        path: 'cart/get-cart',
+        queryParameters: { 'thumb': 'true' },
+        isCustomize: true);
+    final response = await get(queryUri.toString());
+    var rep = WooBaseResponse.fromJson(response);
+
+    if (rep.code == 'OK') {
+      // final jsonStr = json.decode(response);
+      // _printToLog('added to my cart : '+jsonStr.toString());
+      return (rep.data['data'] as List).map((e) => WooCartLine.fromJson(e)).toList();
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
+  }
 
   /// Creates an order and returns the [WooOrder] object.
   ///
@@ -1570,7 +1643,7 @@ class WooCommerce{
   }
 
   _handleError(dynamic response){
-    if(response['message']==null){
+    if(response['message']==null || response['code'] == 'OK'){
       return response;
     }
     else {
