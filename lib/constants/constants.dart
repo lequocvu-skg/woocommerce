@@ -40,3 +40,8 @@ const URL_WP_BASE = '/wp-json/wp/v2';
 const URL_WP_BASE_V1 = '/wp-json/ft/v1';
 const URL_USER_ME = '$URL_WP_BASE/users/me';
 const URL_REGISTER_ENDPOINT = '$URL_WP_BASE/users/register';
+
+
+enum ProductType {
+  SIMPLE, VARIATION, BOOKABLE, UNKNOWN
+}

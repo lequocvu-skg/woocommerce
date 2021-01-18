@@ -9,6 +9,7 @@ part of 'cart_item.dart';
 WooCartLine _$WooCartLineFromJson(Map<String, dynamic> json) {
   return WooCartLine(
     key: json['key'] as String,
+    type: json['type'] as String,
     productId: json['product_id'] as int,
     variationId: json['variation_id'] as int,
     variation: json['variation'],
@@ -28,6 +29,7 @@ WooCartLine _$WooCartLineFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$WooCartLineToJson(WooCartLine instance) =>
     <String, dynamic>{
       'key': instance.key,
+      'type': instance.type,
       'product_id': instance.productId,
       'variation_id': instance.variationId,
       'variation': instance.variation,

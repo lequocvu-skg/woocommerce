@@ -48,6 +48,7 @@ import 'package:woocommerce/models/customer_download.dart';
 import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
 import 'package:woocommerce/models/woo_base.dart';
+import 'package:woocommerce/utilities/utils.dart';
 import 'models/cart_item.dart';
 import 'woocommerce_error.dart';
 import 'models/cart.dart';
@@ -1085,22 +1086,24 @@ class WooCommerce{
   }
 
   Future<WooBaseResponse> addItemToCart({@required String id,
-    @required int quantity, int variationId}) async {
+    @required int quantity, int variationId, String type}) async {
     Map<String, dynamic> data = {
       "product_id": id,
-      "quantity": quantity
+      "quantity": quantity,
+      "cart_item_data": {
+        "type": type
+      }
     };
     if(variationId != null) data['variation_id'] = variationId;
     _setApiResourceUrl(path: 'cart/add-to-cart', isCustomize: true);
     final response = await post(queryUri.toString(), data);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final jsonStr = json.decode(response.body);
-      _printToLog('added to my cart : '+jsonStr.toString());
-      return WooBaseResponse.fromJson(jsonStr);
+    var wooRes = WooBaseResponse.fromJson(response);
+    if (wooRes?.code == 'OK') {
+      _printToLog('added to my cart : ' + wooRes.toString());
+      return wooRes;
     } else {
       WooCommerceError err =
-      WooCommerceError.fromJson(json.decode(response.body));
+      WooCommerceError.fromJson(response);
       throw err;
     }
   }
@@ -1112,14 +1115,14 @@ class WooCommerce{
     };
     _setApiResourceUrl(path: 'cart/update-item-cart', isCustomize: true);
     final response = await post(queryUri.toString(), data);
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final jsonStr = json.decode(response.body);
-      _printToLog('added to my cart : '+jsonStr.toString());
-      return WooBaseResponse.fromJson(jsonStr);
+    var wooRes = WooBaseResponse.fromJson(response);
+    if (wooRes?.code == 'OK'
+      || wooRes?.code == 'wc_cart_rest_remove_item') {
+      _printToLog('added to my cart : ' + wooRes.toString());
+      return wooRes;
     } else {
       WooCommerceError err =
-      WooCommerceError.fromJson(json.decode(response.body));
+      WooCommerceError.fromJson(response);
       throw err;
     }
   }
@@ -1127,11 +1130,12 @@ class WooCommerce{
   Future<WooBaseResponse> clearCart() async {
     _setApiResourceUrl(path: 'cart/clear-cart', isCustomize: true);
     final response = await post(queryUri.toString(), {});
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final jsonStr = json.decode(response.body);
-      _printToLog('added to my cart : '+jsonStr.toString());
-      return WooBaseResponse.fromJson(jsonStr);
+    var wooRes = WooBaseResponse.fromJson(response);
+    if (wooRes?.code == 'OK') {
+      // final jsonStr = json.decode(response.body);
+      // _printToLog('added to my cart : '+jsonStr.toString());
+      // return WooBaseResponse.fromJson(jsonStr);
+      return wooRes;
     } else {
       WooCommerceError err =
       WooCommerceError.fromJson(json.decode(response.body));
@@ -1643,7 +1647,8 @@ class WooCommerce{
   }
 
   _handleError(dynamic response){
-    if(response['message']==null || response['code'] == 'OK'){
+    if(response['message']==null || response['data']['status'] == 200
+    ){
       return response;
     }
     else {

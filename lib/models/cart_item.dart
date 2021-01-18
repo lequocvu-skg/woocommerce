@@ -32,6 +32,9 @@
  */
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:woocommerce/constants/constants.dart';
+import 'package:woocommerce/models/order.dart';
+import 'package:woocommerce/utilities/utils.dart';
 
 part 'cart_item.g.dart';
 
@@ -146,6 +149,7 @@ class WooCartItemImages {
 @JsonSerializable()
 class WooCartLine {
   String key;
+  String type;
   @JsonKey(name: 'product_id')
   int productId;
   @JsonKey(name: 'variation_id')
@@ -171,11 +175,25 @@ class WooCartLine {
   String productImage;
 
 
-  WooCartLine({this.key, this.productId, this.variationId, this.variation,
+  WooCartLine({this.key, this.type, this.productId, this.variationId, this.variation,
   this.quantity, this.dataHash, this.lineTaxData, this.lineSubtotal, this.lineSubtotalTax,
   this.lineTotal, this.lineTax, this.data, this.productName, this.productImage});
 
   factory WooCartLine.fromJson(Map<String, dynamic> json) =>
       _$WooCartLineFromJson(json);
   Map<String, dynamic> toJson() => _$WooCartLineToJson(this);
+
+  static WooCartLine  fromLineItems(LineItems item) {
+    return WooCartLine(
+      productName: item.name,
+      productId: item.id,
+      lineSubtotal: double.parse(item.subtotal).round(),
+      lineTotal: double.parse(item.total).round(),
+      lineTax: double.parse(item.totalTax).round(),
+      lineSubtotalTax: double.parse(item.subtotalTax).round(),
+      quantity: item.quantity
+    );
+  }
+  
+  ProductType get productType => parseStringToProductType(type);
 }

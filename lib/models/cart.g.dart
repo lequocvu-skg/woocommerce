@@ -35,6 +35,63 @@ Map<String, dynamic> _$WooVariantItemParamToJson(
       'quantity': instance.quantity,
     };
 
+WooSimpleLineItem _$WooSimpleLineItemFromJson(Map<String, dynamic> json) {
+  return WooSimpleLineItem(
+    productId: json['product_id'] as int,
+    name: json['name'] as String,
+    variationId: json['variation_id'] as int,
+    taxClass: json['tax_class'] as String,
+    subtotal: json['subtotal'] as String,
+    total: json['total'] as String,
+    quantity: json['quantity'] as int,
+    productType: json['product_type'] as bool,
+  );
+}
+
+Map<String, dynamic> _$WooSimpleLineItemToJson(WooSimpleLineItem instance) =>
+    <String, dynamic>{
+      'product_id': instance.productId,
+      'name': instance.name,
+      'variation_id': instance.variationId,
+      'tax_class': instance.taxClass,
+      'subtotal': instance.subtotal,
+      'total': instance.total,
+      'quantity': instance.quantity,
+      'product_type': instance.productType,
+    };
+
+WooBookableLineItem _$WooBookableLineItemFromJson(Map<String, dynamic> json) {
+  return WooBookableLineItem(
+    productId: json['product_id'] as int,
+    name: json['name'] as String,
+    variationId: json['variation_id'] as int,
+    taxClass: json['tax_class'] as String,
+    subtotal: json['subtotal'] as String,
+    total: json['total'] as String,
+    quantity: json['quantity'] as int,
+    productType: json['product_type'] as bool,
+    wcStartDateTime: json['wc_bookings_field_start_date_time'] as String,
+    wcStartDateTimeZone:
+        json['wc_bookings_field_start_date_local_timezone'] as String,
+  );
+}
+
+Map<String, dynamic> _$WooBookableLineItemToJson(
+        WooBookableLineItem instance) =>
+    <String, dynamic>{
+      'product_id': instance.productId,
+      'name': instance.name,
+      'variation_id': instance.variationId,
+      'tax_class': instance.taxClass,
+      'subtotal': instance.subtotal,
+      'total': instance.total,
+      'quantity': instance.quantity,
+      'product_type': instance.productType,
+      'wc_bookings_field_start_date_time': instance.wcStartDateTime,
+      'wc_bookings_field_start_date_local_timezone':
+          instance.wcStartDateTimeZone,
+    };
+
 WooUpdateCartItemParam _$WooUpdateCartItemParamFromJson(
     Map<String, dynamic> json) {
   return WooUpdateCartItemParam(

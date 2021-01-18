@@ -31,6 +31,10 @@
 
  */
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'order_payload.g.dart';
+
 class WooOrderPayload {
   String paymentMethod;
   String paymentMethodTitle;
@@ -331,10 +335,14 @@ class WooOrderPayloadShipping {
   }
 }
 
+@JsonSerializable()
 class LineItems {
+  @JsonKey(name: 'product_id')
   int productId;
   String name;
+  @JsonKey(name: 'variation_id')
   int variationId;
+  @JsonKey(name: 'tax_class')
   String taxClass;
   String subtotal;
   String total;
@@ -349,39 +357,43 @@ class LineItems {
       this.total,
       this.quantity});
 
-  LineItems.fromJson(Map<String, dynamic> json) {
-    productId = json['product_id'];
-    name = json['name'];
-    variationId = json['variation_id'];
-    taxClass = json['tax_class'];
-    subtotal = json['subtotal'];
-    total = json['total'];
-    quantity = json['quantity'];
-  }
+  factory LineItems.fromJson(Map<String, dynamic> json) =>
+      _$LineItemsFromJson(json);
+  Map<String, dynamic> toJson() => _$LineItemsToJson(this);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['product_id'] = this.productId;
-    if (this.name !=null){
-      data['name'] = this.name;
-    }
+  // LineItems.fromJson(Map<String, dynamic> json) {
+  //   productId = json['product_id'];
+  //   name = json['name'];
+  //   variationId = json['variation_id'];
+  //   taxClass = json['tax_class'];
+  //   subtotal = json['subtotal'];
+  //   total = json['total'];
+  //   quantity = json['quantity'];
+  // }
 
-    if (this.variationId != null) {
-      data['variation_id'] = this.variationId;
-    }
-    if (this.taxClass != null) {
-      data['tax_class'] = this.taxClass;
-    }
-    if (this.subtotal != null){
-      data['subtotal'] = this.subtotal;
-    }
-    if (this.total != null){
-      data['total'] = this.total;
-    }
-
-    data['quantity'] = this.quantity;
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['product_id'] = this.productId;
+  //   if (this.name !=null){
+  //     data['name'] = this.name;
+  //   }
+  //
+  //   if (this.variationId != null) {
+  //     data['variation_id'] = this.variationId;
+  //   }
+  //   if (this.taxClass != null) {
+  //     data['tax_class'] = this.taxClass;
+  //   }
+  //   if (this.subtotal != null){
+  //     data['subtotal'] = this.subtotal;
+  //   }
+  //   if (this.total != null){
+  //     data['total'] = this.total;
+  //   }
+  //
+  //   data['quantity'] = this.quantity;
+  //   return data;
+  // }
   @override toString() => this.toJson().toString();
 }
 
