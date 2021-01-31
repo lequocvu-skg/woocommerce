@@ -31,6 +31,7 @@
 
  */
 
+const URL_BOOKING = '/wp-json/wc-bookings/v1/';
 const URL_WP_CUSTOMIZE = '/wp-json/ft/v1/';
 const String URL_STORE_API_PATH = '/wp-json/wc/store/';
 const URL_JWT_BASE = '/wp-json/jwt-auth/v1';
@@ -44,4 +45,8 @@ const URL_REGISTER_ENDPOINT = '$URL_WP_BASE/users/register';
 
 enum ProductType {
   SIMPLE, VARIATION, BOOKABLE, UNKNOWN
+}
+
+enum HostType {
+  BASE, SHOP, CUSTOM, BOOKING
 }

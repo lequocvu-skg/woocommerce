@@ -49,6 +49,7 @@ import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
 import 'package:woocommerce/models/woo_base.dart';
 import 'package:woocommerce/utilities/utils.dart';
+import 'models/book.dart';
 import 'models/cart_item.dart';
 import 'woocommerce_error.dart';
 import 'models/cart.dart';
@@ -1085,6 +1086,24 @@ class WooCommerce{
     }
   }
 
+  Future<WooBaseResponse> addBookingToCart({@required BookingParams bookingData}) async {
+    Map<String, dynamic> data = bookingData.toJson();
+    data["cart_item_data"] = {
+      "type": "booking"
+    };
+    _setApiResourceUrl(path: 'booking/add-to-cart', hostType: HostType.CUSTOM);
+    final response = await post(queryUri.toString(), data);
+    var wooRes = WooBaseResponse.fromJson(response);
+    if (wooRes?.code == 'OK') {
+      _printToLog('added to my cart : ' + wooRes.toString());
+      return wooRes;
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(response);
+      throw err;
+    }
+  }
+
   Future<WooBaseResponse> addItemToCart({@required String id,
     @required int quantity, int variationId, String type}) async {
     Map<String, dynamic> data = {
@@ -1095,7 +1114,7 @@ class WooCommerce{
       }
     };
     if(variationId != null) data['variation_id'] = variationId;
-    _setApiResourceUrl(path: 'cart/add-to-cart', isCustomize: true);
+    _setApiResourceUrl(path: 'cart/add-to-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK') {
@@ -1113,7 +1132,7 @@ class WooCommerce{
       "cart_item_key": key,
       "quantity": quantity
     };
-    _setApiResourceUrl(path: 'cart/update-item-cart', isCustomize: true);
+    _setApiResourceUrl(path: 'cart/update-item-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK'
@@ -1128,13 +1147,10 @@ class WooCommerce{
   }
 
   Future<WooBaseResponse> clearCart() async {
-    _setApiResourceUrl(path: 'cart/clear-cart', isCustomize: true);
-    final response = await post(queryUri.toString(), {});
+    _setApiResourceUrl(path: 'cart/clear-cart', hostType: HostType.CUSTOM);
+    final response = await get(queryUri.toString());
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK') {
-      // final jsonStr = json.decode(response.body);
-      // _printToLog('added to my cart : '+jsonStr.toString());
-      // return WooBaseResponse.fromJson(jsonStr);
       return wooRes;
     } else {
       WooCommerceError err =
@@ -1147,7 +1163,7 @@ class WooCommerce{
     _setApiResourceUrl(
         path: 'cart/get-cart',
         queryParameters: { 'thumb': 'true' },
-        isCustomize: true);
+        hostType: HostType.CUSTOM);
     final response = await get(queryUri.toString());
     var rep = WooBaseResponse.fromJson(response);
 
@@ -1174,7 +1190,7 @@ class WooCommerce{
 
   Future<WooOrder> createOrderCustomize (WooOrderPayload orderPayload) async{
     _printToLog('Creating Order With Payload : ' + orderPayload.toString());
-    _setApiResourceUrl(path: 'order/create-order', isCustomize: true);
+    _setApiResourceUrl(path: 'order/create-order', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), orderPayload.toJson());
     return WooOrder.fromJson(response);
   }
@@ -1538,6 +1554,31 @@ class WooCommerce{
     return WooPaymentGateway.fromJson(response);
   }
 
+  // Booking session
+
+  /// Get booking slots
+  /// @minDate yyyy-mm-dd
+  /// @maxDate yyy-mm-dd
+  Future<List<Slot>> getSlots({String minDate, String maxDate, int productIds}) async {
+    _setApiResourceUrl(path: 'products/slots', hostType: HostType.BOOKING,
+    queryParameters: {
+      'min_date': minDate,
+      'max_date': maxDate,
+      'product_ids': productIds.toString()
+    });
+    final response = await get(queryUri.toString());
+    // var rep = WooBaseResponse.fromJson(response);
+    if (response != null && (response as Map).containsKey('records')) {
+      return (response['records'] as List).map((e) => Slot.fromJson(e)).toList();
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(json.decode(response.body));
+      throw err;
+    }
+  }
+
+
+  // Utils session
 
   /// This Generates a valid OAuth 1.0 URL
   ///
@@ -1682,18 +1723,39 @@ class WooCommerce{
   String _setApiResourceUrl({
     @required String path,
     String host, port, queryParameters,
-    bool isShop = false,
-    bool isCustomize = false
+    HostType hostType = HostType.BASE
   }) {
-    this.apiPath = DEFAULT_WC_API_PATH;
-    if(isShop){
-      this.apiPath = URL_STORE_API_PATH;
+    
+    switch(hostType) {
+      case HostType.BASE:
+        this.apiPath = DEFAULT_WC_API_PATH;
+        break;
+      case HostType.SHOP:
+        this.apiPath = URL_STORE_API_PATH;
+        break;
+      case HostType.CUSTOM:
+        this.apiPath = URL_WP_CUSTOMIZE;
+        break;
+      case HostType.BOOKING:
+        this.apiPath = URL_BOOKING;
+        break;
+      default:
+        this.apiPath = DEFAULT_WC_API_PATH;
+        break;
     }
-    else if (isCustomize) {
-      this.apiPath = URL_WP_CUSTOMIZE;
-    } else {
-      this.apiPath = DEFAULT_WC_API_PATH;
-    }
+    
+    
+    // if(isShop){
+    //   this.apiPath = URL_STORE_API_PATH;
+    // }
+    // else if (isCustomize) {
+    //   this.apiPath = URL_WP_CUSTOMIZE;
+    // } 
+    // else {
+    //   this.apiPath = DEFAULT_WC_API_PATH;
+    // }
+    
+    
     //List<Map>param = [];
     // queryParameters.forEach((k, v) => param.add({k : v})); print(param.toString());
     getAuthTokenFromDb();
