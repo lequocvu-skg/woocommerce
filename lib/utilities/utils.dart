@@ -20,10 +20,12 @@ String parseProductTypeToString(ProductType type) {
 ProductType parseStringToProductType(String type) {
   switch(type) {
     case 'variation':
+    case 'variable':
       return ProductType.VARIATION;
     case 'simple':
       return ProductType.SIMPLE;
     case 'bookable':
+    case 'booking':
       return ProductType.BOOKABLE;
     default:
       return ProductType.UNKNOWN;

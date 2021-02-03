@@ -70,6 +70,7 @@ WooBookableLineItem _$WooBookableLineItemFromJson(Map<String, dynamic> json) {
     total: json['total'] as String,
     quantity: json['quantity'] as int,
     productType: json['product_type'] as bool,
+    wcBookingDuration: json['wc_bookings_field_duration'] as int,
     wcStartDateTime: json['wc_bookings_field_start_date_time'] as String,
     wcStartDateTimeZone:
         json['wc_bookings_field_start_date_local_timezone'] as String,
@@ -87,6 +88,7 @@ Map<String, dynamic> _$WooBookableLineItemToJson(
       'total': instance.total,
       'quantity': instance.quantity,
       'product_type': instance.productType,
+      'wc_bookings_field_duration': instance.wcBookingDuration,
       'wc_bookings_field_start_date_time': instance.wcStartDateTime,
       'wc_bookings_field_start_date_local_timezone':
           instance.wcStartDateTimeZone,

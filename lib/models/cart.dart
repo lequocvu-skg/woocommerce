@@ -246,6 +246,8 @@ class WooSimpleLineItem extends LineItems {
 class WooBookableLineItem extends LineItems {
   @JsonKey(name: 'product_type')
   bool productType;
+  @JsonKey(name: 'wc_bookings_field_duration')
+  int wcBookingDuration;
   @JsonKey(name: "wc_bookings_field_start_date_time")
   String wcStartDateTime;
   @JsonKey(name: "wc_bookings_field_start_date_local_timezone")
@@ -260,6 +262,7 @@ class WooBookableLineItem extends LineItems {
     String total,
     int quantity,
     this.productType,
+    this.wcBookingDuration,
     this.wcStartDateTime,
     this.wcStartDateTimeZone
   }) : super(

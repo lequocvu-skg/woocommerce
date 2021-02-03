@@ -575,9 +575,9 @@ class LineItems {
     subtotalTax = json['subtotal_tax'];
     total = json['total'];
     totalTax = json['total_tax'];
-    taxes = (json['taxes'] as List).map((i) => Taxes.fromJson(i)).toList();
+    taxes = (json['taxes'] as List)?.map((i) => Taxes.fromJson(i))?.toList();
     metaData =
-        (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+        (json['meta_data'] as List)?.map((i) => MetaData.fromJson(i))?.toList();
     sku = json['sku'];
     price = json['price'].toString();
   }
@@ -702,9 +702,9 @@ class ShippingLines {
     total = json['total'];
     totalTax = json['total_tax'];
 
-    taxes = (json['taxes'] as List).map((i) => Taxes.fromJson(i)).toList();
+    taxes = (json['taxes'] as List)?.map((i) => Taxes.fromJson(i))?.toList();
     metaData =
-        (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
+        (json['meta_data'] as List)?.map((i) => MetaData.fromJson(i)).toList();
   }
 
   Map<String, dynamic> toJson() {
