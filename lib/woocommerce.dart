@@ -44,6 +44,7 @@ import "dart:core";
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:woocommerce/models/account.dart';
 import 'package:woocommerce/models/customer_download.dart';
 import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
@@ -1177,6 +1178,16 @@ class WooCommerce{
       throw err;
     }
   }
+
+
+  Future<WooAccount> updateProfile (WooAccountRequest account) async{
+    _setApiResourceUrl(path: 'auth/update', hostType: HostType.CUSTOM);
+    final response = await post(queryUri.toString(), account.toJson());
+    return WooAccount.fromJson(response['data']['user_info']);
+    // return WooOrder.fromJson(response);
+  }
+
+
 
   /// Creates an order and returns the [WooOrder] object.
   ///
