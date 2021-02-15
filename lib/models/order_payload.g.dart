@@ -8,7 +8,7 @@ part of 'order_payload.dart';
 
 LineItems _$LineItemsFromJson(Map<String, dynamic> json) {
   return LineItems(
-    productId: json['product_id'] as int,
+    productId: json['product_id'] as String,
     name: json['name'] as String,
     variationId: json['variation_id'] as int,
     taxClass: json['tax_class'] as String,

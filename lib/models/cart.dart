@@ -217,16 +217,17 @@ class WooVariantItemParam {
 class WooSimpleLineItem extends LineItems {
   @JsonKey(name: 'product_type')
   bool productType;
+  Map<String, dynamic> variation;
 
   WooSimpleLineItem({
-    int productId,
+    String productId,
     String name,
     int variationId,
     String taxClass,
     String subtotal,
     String total,
     int quantity,
-    this.productType}): super(
+    this.productType, this.variation}): super(
       productId: productId,
       name: name,
       variationId: variationId,
@@ -254,7 +255,7 @@ class WooBookableLineItem extends LineItems {
   String wcStartDateTimeZone;
 
   WooBookableLineItem({
-    int productId,
+    String productId,
     String name,
     int variationId,
     String taxClass,

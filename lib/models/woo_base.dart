@@ -1,7 +1,7 @@
 
 
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:woocommerce/utilities/extension_utils.dart';
 part 'woo_base.g.dart';
 
 @JsonSerializable()
@@ -15,5 +15,5 @@ class WooBaseResponse {
 
   factory WooBaseResponse.fromJson(Map<String, dynamic> json) =>
       _$WooBaseResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$WooBaseResponseToJson(this);
+  Map<String, dynamic> toJson() => _$WooBaseResponseToJson(this).cleanup();
 }

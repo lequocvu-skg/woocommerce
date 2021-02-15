@@ -42,8 +42,7 @@ class WooAccount {
   String country;
   @JsonKey(toJson: _childProfileToJson, nullable: true)
   ChildProfile child;
-  @JsonKey(name: 'shipping_address_list', toJson: _shippingAddressList,
-      defaultValue: [], nullable: true)
+  @JsonKey(name: 'shipping_address_list', toJson: _shippingAddressList, nullable: true)
   List<ShippingAddress> shippingAddressList;
 
   WooAccount(

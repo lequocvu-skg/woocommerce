@@ -32,6 +32,7 @@
  */
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:woocommerce/utilities/extension_utils.dart';
 
 part 'order_payload.g.dart';
 
@@ -126,28 +127,28 @@ class WooOrderPayload {
     data['customer_note'] = this.customerNote;
     data['parent_id'] = this.parentId;
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData.map((v) => v.toJson().cleanup()).toList();
     }
     if (this.feeLines != null) {
-      data['fee_lines'] = this.feeLines.map((v) => v.toJson()).toList();
+      data['fee_lines'] = this.feeLines.map((v) => v.toJson().cleanup()).toList();
     }
     if (this.couponLines != null) {
-      data['coupon_lines'] = this.couponLines.map((v) => v.toJson()).toList();
+      data['coupon_lines'] = this.couponLines.map((v) => v.toJson().cleanup()).toList();
     }
     if (this.billing != null) {
-      data['billing'] = this.billing.toJson();
+      data['billing'] = this.billing.toJson().cleanup();
     }
     if (this.shipping != null) {
-      data['shipping'] = this.shipping.toJson();
+      data['shipping'] = this.shipping.toJson().cleanup();
     }
     if (this.lineItems != null) {
-      data['line_items'] = this.lineItems.map((v) => v.toJson()).toList();
+      data['line_items'] = this.lineItems.map((v) => v.toJson().cleanup()).toList();
     }
     if (this.shippingLines != null) {
       data['shipping_lines'] =
-          this.shippingLines.map((v) => v.toJson()).toList();
+          this.shippingLines.map((v) => v.toJson().cleanup()).toList();
     }
-    return data;
+    return data.cleanup();
   }
   @override toString() => this.toJson().toString();
 }
@@ -167,7 +168,7 @@ class WooOrderPayloadMetaData {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['key'] = this.key;
     data['value'] = this.value;
-    return data;
+    return data.cleanup();
   }
 }
 
@@ -203,7 +204,7 @@ class WooOrderPayloadFeeLines {
     if (this.metaData != null) {
       data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
     }
-    return data;
+    return data.cleanup();
   }
 }
 
@@ -229,7 +230,7 @@ class WooOrderPayloadCouponLines {
     if (this.metaData != null) {
       data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
     }
-    return data;
+    return data.cleanup();
   }
 }
 
@@ -286,7 +287,7 @@ class WooOrderPayloadBilling {
     if (this.phone != null) {
       data['phone'] = this.phone ?? "";
     }
-    return data;
+    return data.cleanup();
   }
 }
 
@@ -331,14 +332,14 @@ class WooOrderPayloadShipping {
     data['state'] = this.state ?? "";
     data['postcode'] = this.postcode ?? "";
     data['country'] = this.country ?? "";
-    return data;
+    return data.cleanup();
   }
 }
 
 @JsonSerializable()
 class LineItems {
   @JsonKey(name: 'product_id')
-  int productId;
+  String productId;
   String name;
   @JsonKey(name: 'variation_id')
   int variationId;
@@ -359,7 +360,7 @@ class LineItems {
 
   factory LineItems.fromJson(Map<String, dynamic> json) =>
       _$LineItemsFromJson(json);
-  Map<String, dynamic> toJson() => _$LineItemsToJson(this);
+  Map<String, dynamic> toJson() => _$LineItemsToJson(this).cleanup();
 
   // LineItems.fromJson(Map<String, dynamic> json) {
   //   productId = json['product_id'];
@@ -415,6 +416,6 @@ class ShippingLines {
     data['method_id'] = this.methodId;
     data['method_title'] = this.methodTitle;
     data['total'] = this.total;
-    return data;
+    return data.cleanup();
   }
 }

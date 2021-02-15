@@ -1106,7 +1106,7 @@ class WooCommerce{
   }
 
   Future<WooBaseResponse> addItemToCart({@required String id,
-    @required int quantity, int variationId, String type}) async {
+    @required int quantity, int variationId, Map<String, String> variation, String type}) async {
     Map<String, dynamic> data = {
       "product_id": id,
       "quantity": quantity,
@@ -1114,6 +1114,7 @@ class WooCommerce{
         "type": type
       }
     };
+    if (variation != null) data['variation'] = variation;
     if(variationId != null) data['variation_id'] = variationId;
     _setApiResourceUrl(path: 'cart/add-to-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
@@ -1188,6 +1189,11 @@ class WooCommerce{
   }
 
 
+  Future<WooAccount> getProfile() async{
+    _setApiResourceUrl(path: 'auth/me', hostType: HostType.CUSTOM);
+    final response = await get(queryUri.toString());
+    return WooAccount.fromJson(response['data']['user_info']);
+  }
 
   /// Creates an order and returns the [WooOrder] object.
   ///
@@ -1202,6 +1208,7 @@ class WooCommerce{
   Future<dynamic> createOrderCustomize (WooOrderPayload orderPayload) async{
     _printToLog('Creating Order With Payload : ' + orderPayload.toString());
     _setApiResourceUrl(path: 'order/create-order', hostType: HostType.CUSTOM);
+    // var orderPayload.toJson().removeWhere((key, value) => key == null || value == null);
     final response = await post(queryUri.toString(), orderPayload.toJson());
     return response;
     // return WooOrder.fromJson(response);

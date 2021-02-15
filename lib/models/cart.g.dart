@@ -37,7 +37,7 @@ Map<String, dynamic> _$WooVariantItemParamToJson(
 
 WooSimpleLineItem _$WooSimpleLineItemFromJson(Map<String, dynamic> json) {
   return WooSimpleLineItem(
-    productId: json['product_id'] as int,
+    productId: json['product_id'] as String,
     name: json['name'] as String,
     variationId: json['variation_id'] as int,
     taxClass: json['tax_class'] as String,
@@ -45,6 +45,7 @@ WooSimpleLineItem _$WooSimpleLineItemFromJson(Map<String, dynamic> json) {
     total: json['total'] as String,
     quantity: json['quantity'] as int,
     productType: json['product_type'] as bool,
+    variation: json['variation'] as Map<String, dynamic>,
   );
 }
 
@@ -58,11 +59,12 @@ Map<String, dynamic> _$WooSimpleLineItemToJson(WooSimpleLineItem instance) =>
       'total': instance.total,
       'quantity': instance.quantity,
       'product_type': instance.productType,
+      'variation': instance.variation,
     };
 
 WooBookableLineItem _$WooBookableLineItemFromJson(Map<String, dynamic> json) {
   return WooBookableLineItem(
-    productId: json['product_id'] as int,
+    productId: json['product_id'] as String,
     name: json['name'] as String,
     variationId: json['variation_id'] as int,
     taxClass: json['tax_class'] as String,

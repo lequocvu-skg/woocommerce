@@ -46,11 +46,10 @@ WooAccount _$WooAccountFromJson(Map<String, dynamic> json) {
         ? null
         : ChildProfile.fromJson(json['child'] as Map<String, dynamic>),
     shippingAddressList: (json['shipping_address_list'] as List)
-            ?.map((e) => e == null
-                ? null
-                : ShippingAddress.fromJson(e as Map<String, dynamic>))
-            ?.toList() ??
-        [],
+        ?.map((e) => e == null
+            ? null
+            : ShippingAddress.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 

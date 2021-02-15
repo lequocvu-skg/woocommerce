@@ -4,6 +4,7 @@
 
 import 'package:woocommerce/constants/constants.dart';
 
+
 String parseProductTypeToString(ProductType type) {
   switch(type) {
     case ProductType.SIMPLE:
