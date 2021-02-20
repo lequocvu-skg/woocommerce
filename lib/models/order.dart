@@ -32,6 +32,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'order.g.dart';
+
 class WooOrder {
   int id;
   int parentId;
@@ -532,18 +536,26 @@ class Refunds {
   }
 }
 
+@JsonSerializable()
 class LineItems {
   int id;
   String name;
-  int productId;
+  @JsonKey(name: 'product_id')
+  String productId;
+  @JsonKey(name: 'variation_id')
   int variationId;
   int quantity;
+  @JsonKey(name: 'tax_class')
   String taxClass;
   String subtotal;
+  @JsonKey(name: 'subtotal_tax')
   String subtotalTax;
   String total;
+  @JsonKey(name: 'total_tax')
   String totalTax;
+  @JsonKey(toJson: taxesToJson)
   List<Taxes> taxes;
+  @JsonKey(name: 'meta_data', toJson: metaListToJson)
   List<MetaData> metaData;
   String sku;
   String price;
@@ -564,48 +576,57 @@ class LineItems {
       this.sku,
       this.price});
 
-  LineItems.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    productId = json['product_id'];
-    variationId = json['variation_id'];
-    quantity = json['quantity'];
-    taxClass = json['tax_class'];
-    subtotal = json['subtotal'];
-    subtotalTax = json['subtotal_tax'];
-    total = json['total'];
-    totalTax = json['total_tax'];
-    taxes = (json['taxes'] as List)?.map((i) => Taxes.fromJson(i))?.toList();
-    metaData =
-        (json['meta_data'] as List)?.map((i) => MetaData.fromJson(i))?.toList();
-    sku = json['sku'];
-    price = json['price'].toString();
-  }
+  factory LineItems.fromJson(Map<String, dynamic> json) => _$LineItemsFromJson(json);
+  Map<String, dynamic> toJson() => _$LineItemsToJson(this);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['product_id'] = this.productId;
-    data['variation_id'] = this.variationId;
-    data['quantity'] = this.quantity;
-    data['tax_class'] = this.taxClass;
-    data['subtotal'] = this.subtotal;
-    data['subtotal_tax'] = this.subtotalTax;
-    data['total'] = this.total;
-    data['total_tax'] = this.totalTax;
-    if (this.taxes != null) {
-      data['taxes'] = this.taxes.map((v) => v.toJson()).toList();
-    }
-    if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
-    }
-    data['sku'] = this.sku;
-    data['price'] = this.price;
-    return data;
-  }
+  // LineItems.fromJson(Map<String, dynamic> json) {
+  //   id = json['id'];
+  //   name = json['name'];
+  //   productId = json['product_id'];
+  //   variationId = json['variation_id'];
+  //   quantity = json['quantity'];
+  //   taxClass = json['tax_class'];
+  //   subtotal = json['subtotal'];
+  //   subtotalTax = json['subtotal_tax'];
+  //   total = json['total'];
+  //   totalTax = json['total_tax'];
+  //   taxes = (json['taxes'] as List)?.map((i) => Taxes.fromJson(i))?.toList();
+  //   metaData =
+  //       (json['meta_data'] as List)?.map((i) => MetaData.fromJson(i))?.toList();
+  //   sku = json['sku'];
+  //   price = json['price'].toString();
+  // }
+  //
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['id'] = this.id;
+  //   data['name'] = this.name;
+  //   data['product_id'] = this.productId;
+  //   data['variation_id'] = this.variationId;
+  //   data['quantity'] = this.quantity;
+  //   data['tax_class'] = this.taxClass;
+  //   data['subtotal'] = this.subtotal;
+  //   data['subtotal_tax'] = this.subtotalTax;
+  //   data['total'] = this.total;
+  //   data['total_tax'] = this.totalTax;
+  //   if (this.taxes != null) {
+  //     data['taxes'] = this.taxes.map((v) => v.toJson()).toList();
+  //   }
+  //   if (this.metaData != null) {
+  //     data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+  //   }
+  //   data['sku'] = this.sku;
+  //   data['price'] = this.price;
+  //   return data;
+  // }
   @override toString() => this.toJson().toString();
 }
+
+
+List<Map<String, dynamic>> taxesToJson(List<Taxes> items) => items.map((e) => e.toJson()).toList();
+
+List<Map<String, dynamic>> metaListToJson(
+    List<MetaData> items) => items.map((e) => e.toJson()).toList();
 
 class Taxes {
   int id;

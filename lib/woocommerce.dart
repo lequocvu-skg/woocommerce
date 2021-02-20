@@ -1205,13 +1205,13 @@ class WooCommerce{
     return WooOrder.fromJson(response);
   }
 
-  Future<dynamic> createOrderCustomize (WooOrderPayload orderPayload) async{
+  Future<WooOrder> createOrderCustomize (WooOrderPayload orderPayload) async{
     _printToLog('Creating Order With Payload : ' + orderPayload.toString());
     _setApiResourceUrl(path: 'order/create-order', hostType: HostType.CUSTOM);
     // var orderPayload.toJson().removeWhere((key, value) => key == null || value == null);
     final response = await post(queryUri.toString(), orderPayload.toJson());
-    return response;
-    // return WooOrder.fromJson(response);
+    // return response;
+    return WooOrder.fromJson(response);
   }
 
   /// Returns a list of all [Order], with filter options.

@@ -33,6 +33,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'order.dart';
 import 'order_payload.dart';
 
 part 'cart.g.dart';

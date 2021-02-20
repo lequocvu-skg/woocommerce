@@ -46,18 +46,38 @@ WooSimpleLineItem _$WooSimpleLineItemFromJson(Map<String, dynamic> json) {
     quantity: json['quantity'] as int,
     productType: json['product_type'] as bool,
     variation: json['variation'] as Map<String, dynamic>,
-  );
+  )
+    ..id = json['id'] as int
+    ..subtotalTax = json['subtotal_tax'] as String
+    ..totalTax = json['total_tax'] as String
+    ..taxes = (json['taxes'] as List)
+        ?.map(
+            (e) => e == null ? null : Taxes.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..metaData = (json['meta_data'] as List)
+        ?.map((e) =>
+            e == null ? null : MetaData.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..sku = json['sku'] as String
+    ..price = json['price'] as String;
 }
 
 Map<String, dynamic> _$WooSimpleLineItemToJson(WooSimpleLineItem instance) =>
     <String, dynamic>{
-      'product_id': instance.productId,
+      'id': instance.id,
       'name': instance.name,
+      'product_id': instance.productId,
       'variation_id': instance.variationId,
+      'quantity': instance.quantity,
       'tax_class': instance.taxClass,
       'subtotal': instance.subtotal,
+      'subtotal_tax': instance.subtotalTax,
       'total': instance.total,
-      'quantity': instance.quantity,
+      'total_tax': instance.totalTax,
+      'taxes': taxesToJson(instance.taxes),
+      'meta_data': metaListToJson(instance.metaData),
+      'sku': instance.sku,
+      'price': instance.price,
       'product_type': instance.productType,
       'variation': instance.variation,
     };
@@ -76,19 +96,39 @@ WooBookableLineItem _$WooBookableLineItemFromJson(Map<String, dynamic> json) {
     wcStartDateTime: json['wc_bookings_field_start_date_time'] as String,
     wcStartDateTimeZone:
         json['wc_bookings_field_start_date_local_timezone'] as String,
-  );
+  )
+    ..id = json['id'] as int
+    ..subtotalTax = json['subtotal_tax'] as String
+    ..totalTax = json['total_tax'] as String
+    ..taxes = (json['taxes'] as List)
+        ?.map(
+            (e) => e == null ? null : Taxes.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..metaData = (json['meta_data'] as List)
+        ?.map((e) =>
+            e == null ? null : MetaData.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..sku = json['sku'] as String
+    ..price = json['price'] as String;
 }
 
 Map<String, dynamic> _$WooBookableLineItemToJson(
         WooBookableLineItem instance) =>
     <String, dynamic>{
-      'product_id': instance.productId,
+      'id': instance.id,
       'name': instance.name,
+      'product_id': instance.productId,
       'variation_id': instance.variationId,
+      'quantity': instance.quantity,
       'tax_class': instance.taxClass,
       'subtotal': instance.subtotal,
+      'subtotal_tax': instance.subtotalTax,
       'total': instance.total,
-      'quantity': instance.quantity,
+      'total_tax': instance.totalTax,
+      'taxes': taxesToJson(instance.taxes),
+      'meta_data': metaListToJson(instance.metaData),
+      'sku': instance.sku,
+      'price': instance.price,
       'product_type': instance.productType,
       'wc_bookings_field_duration': instance.wcBookingDuration,
       'wc_bookings_field_start_date_time': instance.wcStartDateTime,

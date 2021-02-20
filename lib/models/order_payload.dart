@@ -34,7 +34,9 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce/utilities/extension_utils.dart';
 
-part 'order_payload.g.dart';
+import 'order.dart';
+
+// part 'order_payload.g.dart';
 
 class WooOrderPayload {
   String paymentMethod;
@@ -142,7 +144,9 @@ class WooOrderPayload {
       data['shipping'] = this.shipping.toJson().cleanup();
     }
     if (this.lineItems != null) {
-      data['line_items'] = this.lineItems.map((v) => v.toJson().cleanup()).toList();
+      data['line_items'] = this.lineItems.map((v) {
+        return v.toJson().cleanup();
+      }).toList();
     }
     if (this.shippingLines != null) {
       data['shipping_lines'] =
@@ -336,86 +340,86 @@ class WooOrderPayloadShipping {
   }
 }
 
-@JsonSerializable()
-class LineItems {
-  @JsonKey(name: 'product_id')
-  String productId;
-  String name;
-  @JsonKey(name: 'variation_id')
-  int variationId;
-  @JsonKey(name: 'tax_class')
-  String taxClass;
-  String subtotal;
-  String total;
-  int quantity;
+// @JsonSerializable()
+// class LineItems {
+//   @JsonKey(name: 'product_id')
+//   String productId;
+//   String name;
+//   @JsonKey(name: 'variation_id')
+//   int variationId;
+//   @JsonKey(name: 'tax_class')
+//   String taxClass;
+//   String subtotal;
+//   String total;
+//   int quantity;
+//
+//   LineItems(
+//       {this.productId,
+//       this.name,
+//       this.variationId,
+//       this.taxClass,
+//       this.subtotal,
+//       this.total,
+//       this.quantity});
+//
+//   factory LineItems.fromJson(Map<String, dynamic> json) =>
+//       _$LineItemsFromJson(json);
+//   Map<String, dynamic> toJson() => _$LineItemsToJson(this).cleanup();
+//
+//   // LineItems.fromJson(Map<String, dynamic> json) {
+//   //   productId = json['product_id'];
+//   //   name = json['name'];
+//   //   variationId = json['variation_id'];
+//   //   taxClass = json['tax_class'];
+//   //   subtotal = json['subtotal'];
+//   //   total = json['total'];
+//   //   quantity = json['quantity'];
+//   // }
+//
+//   // Map<String, dynamic> toJson() {
+//   //   final Map<String, dynamic> data = new Map<String, dynamic>();
+//   //   data['product_id'] = this.productId;
+//   //   if (this.name !=null){
+//   //     data['name'] = this.name;
+//   //   }
+//   //
+//   //   if (this.variationId != null) {
+//   //     data['variation_id'] = this.variationId;
+//   //   }
+//   //   if (this.taxClass != null) {
+//   //     data['tax_class'] = this.taxClass;
+//   //   }
+//   //   if (this.subtotal != null){
+//   //     data['subtotal'] = this.subtotal;
+//   //   }
+//   //   if (this.total != null){
+//   //     data['total'] = this.total;
+//   //   }
+//   //
+//   //   data['quantity'] = this.quantity;
+//   //   return data;
+//   // }
+//   @override toString() => this.toJson().toString();
+// }
 
-  LineItems(
-      {this.productId,
-      this.name,
-      this.variationId,
-      this.taxClass,
-      this.subtotal,
-      this.total,
-      this.quantity});
-
-  factory LineItems.fromJson(Map<String, dynamic> json) =>
-      _$LineItemsFromJson(json);
-  Map<String, dynamic> toJson() => _$LineItemsToJson(this).cleanup();
-
-  // LineItems.fromJson(Map<String, dynamic> json) {
-  //   productId = json['product_id'];
-  //   name = json['name'];
-  //   variationId = json['variation_id'];
-  //   taxClass = json['tax_class'];
-  //   subtotal = json['subtotal'];
-  //   total = json['total'];
-  //   quantity = json['quantity'];
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['product_id'] = this.productId;
-  //   if (this.name !=null){
-  //     data['name'] = this.name;
-  //   }
-  //
-  //   if (this.variationId != null) {
-  //     data['variation_id'] = this.variationId;
-  //   }
-  //   if (this.taxClass != null) {
-  //     data['tax_class'] = this.taxClass;
-  //   }
-  //   if (this.subtotal != null){
-  //     data['subtotal'] = this.subtotal;
-  //   }
-  //   if (this.total != null){
-  //     data['total'] = this.total;
-  //   }
-  //
-  //   data['quantity'] = this.quantity;
-  //   return data;
-  // }
-  @override toString() => this.toJson().toString();
-}
-
-class ShippingLines {
-  String methodId;
-  String methodTitle;
-  String total;
-
-  ShippingLines({this.methodId, this.methodTitle, this.total});
-
-  ShippingLines.fromJson(Map<String, dynamic> json) {
-    methodId = json['method_id'];
-    methodTitle = json['method_title'];
-    total = json['total'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['method_id'] = this.methodId;
-    data['method_title'] = this.methodTitle;
-    data['total'] = this.total;
-    return data.cleanup();
-  }
-}
+// class ShippingLines {
+//   String methodId;
+//   String methodTitle;
+//   String total;
+//
+//   ShippingLines({this.methodId, this.methodTitle, this.total});
+//
+//   ShippingLines.fromJson(Map<String, dynamic> json) {
+//     methodId = json['method_id'];
+//     methodTitle = json['method_title'];
+//     total = json['total'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['method_id'] = this.methodId;
+//     data['method_title'] = this.methodTitle;
+//     data['total'] = this.total;
+//     return data.cleanup();
+//   }
+// }
