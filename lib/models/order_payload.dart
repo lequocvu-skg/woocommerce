@@ -144,9 +144,9 @@ class WooOrderPayload {
       data['shipping'] = this.shipping.toJson().cleanup();
     }
     if (this.lineItems != null) {
-      data['line_items'] = this.lineItems.map((v) {
+      data['line_items'] = this.lineItems?.map((v) {
         return v.toJson().cleanup();
-      }).toList();
+      })?.toList() ?? [];
     }
     if (this.shippingLines != null) {
       data['shipping_lines'] =

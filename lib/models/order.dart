@@ -541,7 +541,7 @@ class LineItems {
   int id;
   String name;
   @JsonKey(name: 'product_id')
-  String productId;
+  dynamic productId;
   @JsonKey(name: 'variation_id')
   int variationId;
   int quantity;
@@ -553,7 +553,7 @@ class LineItems {
   String total;
   @JsonKey(name: 'total_tax')
   String totalTax;
-  @JsonKey(toJson: taxesToJson)
+  @JsonKey(toJson: taxesToJson, nullable: true)
   List<Taxes> taxes;
   @JsonKey(name: 'meta_data', toJson: metaListToJson)
   List<MetaData> metaData;
@@ -623,10 +623,9 @@ class LineItems {
 }
 
 
-List<Map<String, dynamic>> taxesToJson(List<Taxes> items) => items.map((e) => e.toJson()).toList();
+List<Map<String, dynamic>> taxesToJson(List<Taxes> items) => items?.map((e) => e.toJson())?.toList() ?? [];
 
-List<Map<String, dynamic>> metaListToJson(
-    List<MetaData> items) => items.map((e) => e.toJson()).toList();
+List<Map<String, dynamic>> metaListToJson(List<MetaData> items) => items == null ? [] : items.map((e) => e.toJson()).toList();
 
 class Taxes {
   int id;
