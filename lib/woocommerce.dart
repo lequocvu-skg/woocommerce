@@ -48,8 +48,8 @@ import 'package:woocommerce/models/account.dart';
 import 'package:woocommerce/models/customer_download.dart';
 import 'package:woocommerce/models/payment_gateway.dart';
 import 'package:woocommerce/models/shipping_zone_method.dart';
+import 'package:woocommerce/models/wishlist_product.dart';
 import 'package:woocommerce/models/woo_base.dart';
-import 'package:woocommerce/utilities/utils.dart';
 import 'models/book.dart';
 import 'models/cart_item.dart';
 import 'woocommerce_error.dart';
@@ -541,9 +541,9 @@ class WooCommerce{
     productVariation = WooProductVariation.fromJson(response);
     return productVariation;
   }
-  
+
   /// Returns a List[WooProductVariation], with the specified [productId] only.
-  
+
   Future<List<WooProductVariation>>getProductVariationsByProductId({@required int productId}) async{
     List<WooProductVariation> productVariations = [];
     _setApiResourceUrl(path: 'products/'+productId.toString()+'/variations/');
@@ -1597,6 +1597,217 @@ class WooCommerce{
   }
 
 
+
+
+  // Wishlist section
+
+  Future<List<WishlistProduct>> getWishlist({int page, int perPage}) async{
+    // Map params = {'page': page, 'per_page': perPage};
+
+    // ({'page': page, 'per_page': perPage})
+    //     .forEach((k, v) {
+    //   if(v != null) params[k] = v.toString();
+    // });
+    // _setApiResourceUrl(path: 'wishlist/get-wishlist-list?page=$page&per_page=$perPage', hostType: HostType.CUSTOM);
+    // final response = await get(queryUri.toString());
+
+
+
+
+    Map response = {
+      "message": "Get wishlist list is successfully",
+      "code": "OK",
+      "data": {
+        "status": 200,
+        "data": [
+          {
+            "products": [
+              {
+                "ID": 18,
+                "wishlist_id": 5,
+                "product_id": 104,
+                "variation_id": 0,
+                "author": 39,
+                "date": "2021-02-27 23:52:13",
+                "quantity": 1,
+                "price": "120000",
+                "in_stock": true,
+                "meta": [],
+                "data": {
+                  "availability_rules": []
+                },
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/long-sleeve-tee-2.jpg"
+              },
+              {
+                "ID": 15,
+                "wishlist_id": 5,
+                "product_id": 44,
+                "variation_id": 67,
+                "author": 39,
+                "date": "2021-02-27 22:11:33",
+                "quantity": 1,
+                "price": "45",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/hoodie-2.jpg"
+              },
+              {
+                "ID": 14,
+                "wishlist_id": 5,
+                "product_id": 55,
+                "variation_id": 0,
+                "author": 39,
+                "date": "2021-02-27 22:07:58",
+                "quantity": 1,
+                "price": "15",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/album-1.jpg"
+              },
+              {
+                "ID": 13,
+                "wishlist_id": 5,
+                "product_id": 56,
+                "variation_id": 223,
+                "author": 39,
+                "date": "2021-02-27 21:57:42",
+                "quantity": 1,
+                "price": "",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/single-1.jpg"
+              },
+              {
+                "ID": 12,
+                "wishlist_id": 5,
+                "product_id": 64,
+                "variation_id": 0,
+                "author": 39,
+                "date": "2021-02-27 21:57:41",
+                "quantity": 1,
+                "price": "",
+                "in_stock": false,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/beanie-with-logo-1.jpg"
+              },
+              {
+                "ID": 9,
+                "wishlist_id": 5,
+                "product_id": 65,
+                "variation_id": 45,
+                "author": 39,
+                "date": "2021-02-27 21:57:32",
+                "quantity": 1,
+                "price": "45",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
+              },
+              {
+                "ID": 10,
+                "wishlist_id": 5,
+                "product_id": 65,
+                "variation_id": 46,
+                "author": 39,
+                "date": "2021-02-27 21:57:32",
+                "quantity": 1,
+                "price": "18",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
+              },
+              {
+                "ID": 11,
+                "wishlist_id": 5,
+                "product_id": 65,
+                "variation_id": 47,
+                "author": 39,
+                "date": "2021-02-27 21:57:32",
+                "quantity": 1,
+                "price": "18",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
+              },
+              {
+                "ID": 8,
+                "wishlist_id": 5,
+                "product_id": 63,
+                "variation_id": 0,
+                "author": 39,
+                "date": "2021-02-27 21:55:24",
+                "quantity": 1,
+                "price": "18",
+                "in_stock": true,
+                "meta": [],
+                "data": {},
+                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/t-shirt-with-logo-1.jpg"
+              }
+            ],
+            "wishlist": {
+              "ID": 5,
+              "author": 39,
+              "date": "2021-02-27 21:00:29",
+              "title": "Wishlist",
+              "status": "share",
+              "type": "default",
+              "share_key": "D0B9F9",
+              "is_owner": true
+            },
+            "wishlist_table": {
+              "colm_checkbox": true,
+              "colm_actions": true,
+              "add_select_to_cart": true,
+              "text_add_select_to_cart": "Add Selected to Cart",
+              "add_all_to_cart": true,
+              "text_add_all_to_cart": "Add All to Cart"
+            },
+            "wishlist_table_row": {
+              "add_to_cart": true,
+              "text_add_to_cart": "Add to Cart",
+              "colm_price": true,
+              "colm_stock": true,
+              "colm_date": true
+            }
+          }
+        ]
+      }
+    };
+    List dataItems = (response['data']['data'] as List);
+
+    if(dataItems == null || dataItems.isEmpty){
+      return [];
+    }
+
+    List items = (dataItems.first['products'] as List) ;
+
+    return items.map((e) => WishlistProduct.fromJson(e)).toList();
+  }
+
+  Future<dynamic> addWishlistProductCustomize ({int productId, int productVariation, String productAction, String productType}) async{
+    _setApiResourceUrl(path: 'wishlist/add-to-wishlist', hostType: HostType.CUSTOM);
+    var body = {'product_id': productId, 'product_variation': productVariation,
+    'product_action': productAction, 'product_type': productType};
+    final response = await post(queryUri.toString(), body);
+    return response;
+  }
+
+  Future<dynamic> clearWishlistProductCustomize ({int wishlist_id, int id}) async{
+    _setApiResourceUrl(path: 'wishlist/remove-wishlist-item', hostType: HostType.CUSTOM);
+    var body = {'wishlist_id': wishlist_id, 'ID': id};
+    final response = await post(queryUri.toString(), body);
+    return response;
+  }
+
+
+
   // Utils session
 
   /// This Generates a valid OAuth 1.0 URL
@@ -1741,10 +1952,10 @@ class WooCommerce{
   // Sets the Uri for an endpoint.
   String _setApiResourceUrl({
     @required String path,
-    String host, port, queryParameters,
+    String host, port, Map<String, dynamic> queryParameters,
     HostType hostType = HostType.BASE
   }) {
-    
+
     switch(hostType) {
       case HostType.BASE:
         this.apiPath = DEFAULT_WC_API_PATH;
@@ -1762,19 +1973,19 @@ class WooCommerce{
         this.apiPath = DEFAULT_WC_API_PATH;
         break;
     }
-    
-    
+
+
     // if(isShop){
     //   this.apiPath = URL_STORE_API_PATH;
     // }
     // else if (isCustomize) {
     //   this.apiPath = URL_WP_CUSTOMIZE;
-    // } 
+    // }
     // else {
     //   this.apiPath = DEFAULT_WC_API_PATH;
     // }
-    
-    
+
+
     //List<Map>param = [];
     // queryParameters.forEach((k, v) => param.add({k : v})); print(param.toString());
     getAuthTokenFromDb();

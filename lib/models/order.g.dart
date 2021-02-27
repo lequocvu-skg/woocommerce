@@ -27,7 +27,7 @@ LineItems _$LineItemsFromJson(Map<String, dynamic> json) {
             e == null ? null : MetaData.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     sku: json['sku'] as String,
-    price: json['price'] is int ? json['price'].toString() : json['price'] as String,
+    price: json['price'] as String,
   );
 }
 
