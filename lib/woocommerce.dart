@@ -1602,184 +1602,185 @@ class WooCommerce{
   // Wishlist section
 
   Future<List<WishlistProduct>> getWishlist({int page, int perPage}) async{
-    // Map params = {'page': page, 'per_page': perPage};
+    Map<String, dynamic> params = {}; // = {'page': page, 'lists_per_page': perPage};
 
-    // ({'page': page, 'per_page': perPage})
-    //     .forEach((k, v) {
-    //   if(v != null) params[k] = v.toString();
-    // });
-    // _setApiResourceUrl(path: 'wishlist/get-wishlist-list?page=$page&per_page=$perPage', hostType: HostType.CUSTOM);
-    // final response = await get(queryUri.toString());
+    ({'page': page, 'lists_per_page': perPage})
+        .forEach((k, v) {
+      if(v != null) params[k] = v.toString();
+    });
+    _printToLog("Parameters: " + params.toString());
+    _setApiResourceUrl(path: 'wishlist/get-wishlist-list', hostType: HostType.CUSTOM, queryParameters: params);
+    final response = await get(queryUri.toString());
+    _printToLog("Response: " + response.toString());
 
 
 
-
-    Map response = {
-      "message": "Get wishlist list is successfully",
-      "code": "OK",
-      "data": {
-        "status": 200,
-        "data": [
-          {
-            "products": [
-              {
-                "ID": 18,
-                "wishlist_id": 5,
-                "product_id": 104,
-                "variation_id": 0,
-                "author": 39,
-                "date": "2021-02-27 23:52:13",
-                "quantity": 1,
-                "price": "120000",
-                "in_stock": true,
-                "meta": [],
-                "data": {
-                  "availability_rules": []
-                },
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/long-sleeve-tee-2.jpg"
-              },
-              {
-                "ID": 15,
-                "wishlist_id": 5,
-                "product_id": 44,
-                "variation_id": 67,
-                "author": 39,
-                "date": "2021-02-27 22:11:33",
-                "quantity": 1,
-                "price": "45",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/hoodie-2.jpg"
-              },
-              {
-                "ID": 14,
-                "wishlist_id": 5,
-                "product_id": 55,
-                "variation_id": 0,
-                "author": 39,
-                "date": "2021-02-27 22:07:58",
-                "quantity": 1,
-                "price": "15",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/album-1.jpg"
-              },
-              {
-                "ID": 13,
-                "wishlist_id": 5,
-                "product_id": 56,
-                "variation_id": 223,
-                "author": 39,
-                "date": "2021-02-27 21:57:42",
-                "quantity": 1,
-                "price": "",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/single-1.jpg"
-              },
-              {
-                "ID": 12,
-                "wishlist_id": 5,
-                "product_id": 64,
-                "variation_id": 0,
-                "author": 39,
-                "date": "2021-02-27 21:57:41",
-                "quantity": 1,
-                "price": "",
-                "in_stock": false,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/beanie-with-logo-1.jpg"
-              },
-              {
-                "ID": 9,
-                "wishlist_id": 5,
-                "product_id": 65,
-                "variation_id": 45,
-                "author": 39,
-                "date": "2021-02-27 21:57:32",
-                "quantity": 1,
-                "price": "45",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
-              },
-              {
-                "ID": 10,
-                "wishlist_id": 5,
-                "product_id": 65,
-                "variation_id": 46,
-                "author": 39,
-                "date": "2021-02-27 21:57:32",
-                "quantity": 1,
-                "price": "18",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
-              },
-              {
-                "ID": 11,
-                "wishlist_id": 5,
-                "product_id": 65,
-                "variation_id": 47,
-                "author": 39,
-                "date": "2021-02-27 21:57:32",
-                "quantity": 1,
-                "price": "18",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
-              },
-              {
-                "ID": 8,
-                "wishlist_id": 5,
-                "product_id": 63,
-                "variation_id": 0,
-                "author": 39,
-                "date": "2021-02-27 21:55:24",
-                "quantity": 1,
-                "price": "18",
-                "in_stock": true,
-                "meta": [],
-                "data": {},
-                "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/t-shirt-with-logo-1.jpg"
-              }
-            ],
-            "wishlist": {
-              "ID": 5,
-              "author": 39,
-              "date": "2021-02-27 21:00:29",
-              "title": "Wishlist",
-              "status": "share",
-              "type": "default",
-              "share_key": "D0B9F9",
-              "is_owner": true
-            },
-            "wishlist_table": {
-              "colm_checkbox": true,
-              "colm_actions": true,
-              "add_select_to_cart": true,
-              "text_add_select_to_cart": "Add Selected to Cart",
-              "add_all_to_cart": true,
-              "text_add_all_to_cart": "Add All to Cart"
-            },
-            "wishlist_table_row": {
-              "add_to_cart": true,
-              "text_add_to_cart": "Add to Cart",
-              "colm_price": true,
-              "colm_stock": true,
-              "colm_date": true
-            }
-          }
-        ]
-      }
-    };
+    // Map response = {
+    //   "message": "Get wishlist list is successfully",
+    //   "code": "OK",
+    //   "data": {
+    //     "status": 200,
+    //     "data": [
+    //       {
+    //         "products": [
+    //           {
+    //             "ID": 18,
+    //             "wishlist_id": 5,
+    //             "product_id": 104,
+    //             "variation_id": 0,
+    //             "author": 39,
+    //             "date": "2021-02-27 23:52:13",
+    //             "quantity": 1,
+    //             "price": "120000",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {
+    //               "availability_rules": []
+    //             },
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/long-sleeve-tee-2.jpg"
+    //           },
+    //           {
+    //             "ID": 15,
+    //             "wishlist_id": 5,
+    //             "product_id": 44,
+    //             "variation_id": 67,
+    //             "author": 39,
+    //             "date": "2021-02-27 22:11:33",
+    //             "quantity": 1,
+    //             "price": "45",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/hoodie-2.jpg"
+    //           },
+    //           {
+    //             "ID": 14,
+    //             "wishlist_id": 5,
+    //             "product_id": 55,
+    //             "variation_id": 0,
+    //             "author": 39,
+    //             "date": "2021-02-27 22:07:58",
+    //             "quantity": 1,
+    //             "price": "15",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/album-1.jpg"
+    //           },
+    //           {
+    //             "ID": 13,
+    //             "wishlist_id": 5,
+    //             "product_id": 56,
+    //             "variation_id": 223,
+    //             "author": 39,
+    //             "date": "2021-02-27 21:57:42",
+    //             "quantity": 1,
+    //             "price": "",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/single-1.jpg"
+    //           },
+    //           {
+    //             "ID": 12,
+    //             "wishlist_id": 5,
+    //             "product_id": 64,
+    //             "variation_id": 0,
+    //             "author": 39,
+    //             "date": "2021-02-27 21:57:41",
+    //             "quantity": 1,
+    //             "price": "",
+    //             "in_stock": false,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/beanie-with-logo-1.jpg"
+    //           },
+    //           {
+    //             "ID": 9,
+    //             "wishlist_id": 5,
+    //             "product_id": 65,
+    //             "variation_id": 45,
+    //             "author": 39,
+    //             "date": "2021-02-27 21:57:32",
+    //             "quantity": 1,
+    //             "price": "45",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
+    //           },
+    //           {
+    //             "ID": 10,
+    //             "wishlist_id": 5,
+    //             "product_id": 65,
+    //             "variation_id": 46,
+    //             "author": 39,
+    //             "date": "2021-02-27 21:57:32",
+    //             "quantity": 1,
+    //             "price": "18",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
+    //           },
+    //           {
+    //             "ID": 11,
+    //             "wishlist_id": 5,
+    //             "product_id": 65,
+    //             "variation_id": 47,
+    //             "author": 39,
+    //             "date": "2021-02-27 21:57:32",
+    //             "quantity": 1,
+    //             "price": "18",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/logo-1.jpg"
+    //           },
+    //           {
+    //             "ID": 8,
+    //             "wishlist_id": 5,
+    //             "product_id": 63,
+    //             "variation_id": 0,
+    //             "author": 39,
+    //             "date": "2021-02-27 21:55:24",
+    //             "quantity": 1,
+    //             "price": "18",
+    //             "in_stock": true,
+    //             "meta": [],
+    //             "data": {},
+    //             "product_image": "http://103.92.28.198:8000/wp-content/uploads/2020/12/t-shirt-with-logo-1.jpg"
+    //           }
+    //         ],
+    //         "wishlist": {
+    //           "ID": 5,
+    //           "author": 39,
+    //           "date": "2021-02-27 21:00:29",
+    //           "title": "Wishlist",
+    //           "status": "share",
+    //           "type": "default",
+    //           "share_key": "D0B9F9",
+    //           "is_owner": true
+    //         },
+    //         "wishlist_table": {
+    //           "colm_checkbox": true,
+    //           "colm_actions": true,
+    //           "add_select_to_cart": true,
+    //           "text_add_select_to_cart": "Add Selected to Cart",
+    //           "add_all_to_cart": true,
+    //           "text_add_all_to_cart": "Add All to Cart"
+    //         },
+    //         "wishlist_table_row": {
+    //           "add_to_cart": true,
+    //           "text_add_to_cart": "Add to Cart",
+    //           "colm_price": true,
+    //           "colm_stock": true,
+    //           "colm_date": true
+    //         }
+    //       }
+    //     ]
+    //   }
+    // };
     List dataItems = (response['data']['data'] as List);
 
     if(dataItems == null || dataItems.isEmpty){
