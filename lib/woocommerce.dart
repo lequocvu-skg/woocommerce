@@ -433,7 +433,7 @@ class WooCommerce{
         String stockStatus,
         List<int> exclude,
         List<int> parentExclude,
-        List<String> include,
+        String include,
         List<int> parent,
         int offset,
         bool featured,
