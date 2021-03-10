@@ -442,7 +442,7 @@ class WooCommerce{
 
     ({'page': page, 'per_page': perPage, 'search': search,
       'after': after, 'before': before,
-      'exclude': exclude, 'include': include, 'offset': offset,
+      'exclude': exclude, 'include': include != null ? Uri.encodeComponent(include) : include, 'offset': offset,
       'order': order, 'orderby': orderBy, 'parent': parent,
       'parent_exclude': parentExclude, 'slug': slug,
       'status': status, 'type': type, 'sku': sku,
@@ -1119,7 +1119,7 @@ class WooCommerce{
     _setApiResourceUrl(path: 'cart/add-to-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
-    if (wooRes?.code == 'OK') {
+    if (wooRes.code == 'ft_add_to_cart_ok' || wooRes.code == 'OK') {
       _printToLog('added to my cart : ' + wooRes.toString());
       return wooRes;
     } else {
@@ -1169,7 +1169,9 @@ class WooCommerce{
     final response = await get(queryUri.toString());
     var rep = WooBaseResponse.fromJson(response);
 
-    if (rep.code == 'OK') {
+    if (rep.code == 'ft_get_cart_empty') {
+      return [];
+    } else  if (rep.code == 'ft_get_cart_ok' || rep.code == 'OK') {
       // final jsonStr = json.decode(response);
       // _printToLog('added to my cart : '+jsonStr.toString());
       return (rep.data['data'] as List).map((e) => WooCartLine.fromJson(e)).toList();
