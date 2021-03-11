@@ -13,7 +13,7 @@ class WishlistProduct {
   @JsonKey(name: 'variation_id')
   int variationId;
   int author;
-  String date;
+  int date;
   int quantity;
   String price;
   @JsonKey(name: 'in_stock')

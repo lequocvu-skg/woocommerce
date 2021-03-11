@@ -13,7 +13,7 @@ WishlistProduct _$WishlistProductFromJson(Map<String, dynamic> json) {
     productId: json['product_id'] as int,
     variationId: json['variation_id'] as int,
     author: json['author'] as int,
-    date: json['date'] as String,
+    date: json['date'] as int,
     quantity: json['quantity'] as int,
     price: json['price'] as String,
     inStock: json['in_stock'] as bool,
