@@ -69,7 +69,7 @@ import 'models/products.dart';
 import 'models/shipping_method.dart';
 import 'models/shipping_zone.dart';
 import 'models/shipping_zone_location.dart';
-//import 'models/shipping_zone_method.dart';
+import 'package:woocommerce/utilities/extension_utils.dart';
 import 'models/tax_classes.dart';
 import 'models/tax_rate.dart';
 import 'constants/constants.dart';
@@ -451,8 +451,7 @@ class WooCommerce{
       'attribute_term': attributeTerm, 'tax_class': taxClass, 'on_sale': onSale,
       'min_price': minPrice, 'max_price': maxPrice, 'stock_status': stockStatus,
 
-    }
-    ).forEach((k, v) {
+    }.cleanup()).forEach((k, v) {
       if(v != null) payload[k] = v.toString();
     });
 
