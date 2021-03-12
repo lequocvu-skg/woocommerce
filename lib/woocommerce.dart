@@ -1603,98 +1603,99 @@ class WooCommerce{
   // Wishlist section
 
   Future<List<WishlistProduct>> getWishlist({int page, int perPage}) async{
-    // Map<String, dynamic> params = {}; // = {'page': page, 'lists_per_page': perPage};
-    //
-    // ({'page': page, 'lists_per_page': perPage})
-    //     .forEach((k, v) {
-    //   if(v != null) params[k] = v.toString();
-    // });
-    // _printToLog("Parameters: " + params.toString());
-    // _setApiResourceUrl(path: 'wishlist/get-wishlist-list', hostType: HostType.CUSTOM, queryParameters: params);
-    // final response = await get(queryUri.toString());
-    // _printToLog("Response: " + response.toString());
+    Map<String, dynamic> params = {'page': page, 'per_page': perPage};
+
+    ({'page': page, 'per_page': perPage})
+        .forEach((k, v) {
+      if(v != null) params[k] = v.toString();
+    });
+    _printToLog("Parameters: " + params.toString());
+    _setApiResourceUrl(path: 'wishlist/get-wishlist-list', hostType: HostType.CUSTOM, queryParameters: params);
+    final response = await get(queryUri.toString());
+    _printToLog("Response: " + response.toString());
 
 
 
-    Map response = {
-      "message": "Get wishlist list is successfully",
-      "code": "ft_get_wishlist_ok",
-      "data": {
-        "status": 200,
-        "data": [
-          {
-            "ID": 30,
-            "wishlist_id": 5,
-            "product_id": 43,
-            "author": 39,
-            "date": 1615502589
-          },
-          {
-            "ID": 29,
-            "wishlist_id": 5,
-            "product_id": 53,
-            "author": 39,
-            "date": 1615502093
-          },
-          {
-            "ID": 28,
-            "wishlist_id": 5,
-            "product_id": 257,
-            "author": 39,
-            "date": 1615501943
-          },
-          {
-            "ID": 27,
-            "wishlist_id": 5,
-            "product_id": 49,
-            "author": 39,
-            "date": 1615499995
-          },
-          {
-            "ID": 26,
-            "wishlist_id": 5,
-            "product_id": 46,
-            "author": 39,
-            "date": 1615499945
-          },
-          {
-            "ID": 25,
-            "wishlist_id": 5,
-            "product_id": 45,
-            "author": 39,
-            "date": 1615499107
-          },
-          {
-            "ID": 24,
-            "wishlist_id": 5,
-            "product_id": 48,
-            "author": 39,
-            "date": 1615499082
-          },
-          {
-            "ID": 18,
-            "wishlist_id": 5,
-            "product_id": 104,
-            "author": 39,
-            "date": 1614469933
-          },
-          {
-            "ID": 15,
-            "wishlist_id": 5,
-            "product_id": 44,
-            "author": 39,
-            "date": 1614463893
-          },
-          {
-            "ID": 14,
-            "wishlist_id": 5,
-            "product_id": 55,
-            "author": 39,
-            "date": 1614463678
-          }
-        ]
-      }
-    };
+    // Map response = {
+    //   "message": "Get wishlist list is successfully",
+    //   "code": "ft_get_wishlist_ok",
+    //   "data": {
+    //     "status": 200,
+    //     "data": [
+    //       {
+    //         "ID": 30,
+    //         "wishlist_id": 5,
+    //         "product_id": 43,
+    //         "author": 39,
+    //         "date": 1615502589
+    //       },
+    //       {
+    //         "ID": 29,
+    //         "wishlist_id": 5,
+    //         "product_id": 53,
+    //         "author": 39,
+    //         "date": 1615502093
+    //       },
+    //       {
+    //         "ID": 28,
+    //         "wishlist_id": 5,
+    //         "product_id": 257,
+    //         "author": 39,
+    //         "date": 1615501943
+    //       },
+    //       {
+    //         "ID": 27,
+    //         "wishlist_id": 5,
+    //         "product_id": 49,
+    //         "author": 39,
+    //         "date": 1615499995
+    //       },
+    //       {
+    //         "ID": 26,
+    //         "wishlist_id": 5,
+    //         "product_id": 46,
+    //         "author": 39,
+    //         "date": 1615499945
+    //       },
+    //       {
+    //         "ID": 25,
+    //         "wishlist_id": 5,
+    //         "product_id": 45,
+    //         "author": 39,
+    //         "date": 1615499107
+    //       },
+    //       {
+    //         "ID": 24,
+    //         "wishlist_id": 5,
+    //         "product_id": 48,
+    //         "author": 39,
+    //         "date": 1615499082
+    //       },
+    //       {
+    //         "ID": 18,
+    //         "wishlist_id": 5,
+    //         "product_id": 104,
+    //         "author": 39,
+    //         "date": 1614469933
+    //       },
+    //       {
+    //         "ID": 15,
+    //         "wishlist_id": 5,
+    //         "product_id": 44,
+    //         "author": 39,
+    //         "date": 1614463893
+    //       },
+    //       {
+    //         "ID": 14,
+    //         "wishlist_id": 5,
+    //         "product_id": 55,
+    //         "author": 39,
+    //         "date": 1614463678
+    //       }
+    //     ]
+    //   }
+    // };
+
     List dataItems = (response['data']['data'] as List);
 
     if(dataItems == null || dataItems.isEmpty){
