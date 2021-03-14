@@ -165,7 +165,7 @@ class WooOrder {
     metaData =
         (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
     if (json['line_items'] != null) {
-      lineItems = new List<LineItems>();
+      lineItems = [];
       json['line_items'].forEach((v) {
         lineItems.add(new LineItems.fromJson(v));
       });
