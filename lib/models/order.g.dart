@@ -10,7 +10,7 @@ LineItems _$LineItemsFromJson(Map<String, dynamic> json) {
   return LineItems(
     id: json['id'] as int,
     name: json['name'] as String,
-    productId: json['product_id'],
+    productId: json['product_id'] as int,
     variationId: json['variation_id'] as int,
     quantity: json['quantity'] as int,
     taxClass: json['tax_class'] as String,
@@ -27,7 +27,7 @@ LineItems _$LineItemsFromJson(Map<String, dynamic> json) {
             e == null ? null : MetaData.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     sku: json['sku'] as String,
-    price: json['price'] as String,
+    price: json['price'] as int,
   );
 }
 

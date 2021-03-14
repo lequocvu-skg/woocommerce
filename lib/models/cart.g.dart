@@ -37,7 +37,7 @@ Map<String, dynamic> _$WooVariantItemParamToJson(
 
 WooSimpleLineItem _$WooSimpleLineItemFromJson(Map<String, dynamic> json) {
   return WooSimpleLineItem(
-    productId: json['product_id'] as String,
+    productId: json['product_id'] as int,
     name: json['name'] as String,
     variationId: json['variation_id'] as int,
     taxClass: json['tax_class'] as String,
@@ -59,7 +59,7 @@ WooSimpleLineItem _$WooSimpleLineItemFromJson(Map<String, dynamic> json) {
             e == null ? null : MetaData.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..sku = json['sku'] as String
-    ..price = json['price'] as String;
+    ..price = json['price'] as int;
 }
 
 Map<String, dynamic> _$WooSimpleLineItemToJson(WooSimpleLineItem instance) =>
@@ -84,7 +84,7 @@ Map<String, dynamic> _$WooSimpleLineItemToJson(WooSimpleLineItem instance) =>
 
 WooBookableLineItem _$WooBookableLineItemFromJson(Map<String, dynamic> json) {
   return WooBookableLineItem(
-    productId: json['product_id'] as String,
+    productId: json['product_id'] as int,
     name: json['name'] as String,
     variationId: json['variation_id'] as int,
     taxClass: json['tax_class'] as String,
@@ -109,7 +109,7 @@ WooBookableLineItem _$WooBookableLineItemFromJson(Map<String, dynamic> json) {
             e == null ? null : MetaData.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..sku = json['sku'] as String
-    ..price = json['price'] as String;
+    ..price = json['price'] as int;
 }
 
 Map<String, dynamic> _$WooBookableLineItemToJson(

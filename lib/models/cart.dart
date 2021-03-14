@@ -221,7 +221,7 @@ class WooSimpleLineItem extends LineItems {
   Map<String, dynamic> variation;
 
   WooSimpleLineItem({
-    String productId,
+    int productId,
     String name,
     int variationId,
     String taxClass,
@@ -256,7 +256,7 @@ class WooBookableLineItem extends LineItems {
   String wcStartDateTimeZone;
 
   WooBookableLineItem({
-    String productId,
+    int productId,
     String name,
     int variationId,
     String taxClass,

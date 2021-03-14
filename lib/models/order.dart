@@ -496,6 +496,8 @@ class MetaData {
   int id;
   String key;
   String value;
+  String displayKey;
+  String displayValue;
 
   MetaData({this.id, this.key, this.value});
 
@@ -503,6 +505,8 @@ class MetaData {
     id = json['id'];
     key = json['key'];
     value = json['value'];
+    displayKey = json['display_key'];
+    displayValue = json['display_value'];
   }
 
   Map<String, dynamic> toJson() {
@@ -510,6 +514,8 @@ class MetaData {
     data['id'] = this.id;
     data['key'] = this.key;
     data['value'] = this.value;
+    data['display_key'] = this.displayKey;
+    data['display_value'] = this.displayValue;
     return data;
   }
 }
@@ -541,7 +547,7 @@ class LineItems {
   int id;
   String name;
   @JsonKey(name: 'product_id')
-  dynamic productId;
+  int productId;
   @JsonKey(name: 'variation_id')
   int variationId;
   int quantity;
@@ -558,7 +564,7 @@ class LineItems {
   @JsonKey(name: 'meta_data', toJson: metaListToJson)
   List<MetaData> metaData;
   String sku;
-  String price;
+  int price;
 
   LineItems(
       {this.id,
