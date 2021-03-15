@@ -1847,6 +1847,7 @@ class WooCommerce{
   /// Make a custom get request to a Woocommerce endpoint, using WooCommerce SDK.
 
   Future<dynamic> get(String endPoint) async {
+    _printToLog('Call GET => $endPoint}');
     String url = this._getOAuthURL("GET", endPoint);
     String _token = await _localDbService.getSecurityToken();
     String _bearerToken = "Bearer $_token";
@@ -1856,6 +1857,7 @@ class WooCommerce{
     // 'Authorization': _bearerToken,
     try {
       final http.Response response = await http.get(Uri.parse(url));
+      _printToLog('Response GET => $endPoint <= ${response.statusCode} | ${response.toString()}');
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
@@ -1883,9 +1885,10 @@ class WooCommerce{
 
   /// Make a custom post request to Woocommerce, using WooCommerce SDK.
 
-  Future<dynamic> post(String endPoint, Map data,) async {
-    String url = this._getOAuthURL("POST", endPoint);
+  Future<dynamic> post(String endPoint, Map data) async {
+    _printToLog('Call POST => $endPoint | ${data.toString()}');
 
+    String url = this._getOAuthURL("POST", endPoint);
     http.Client client = http.Client();
     http.Request request = http.Request('POST', Uri.parse(url));
     request.headers[HttpHeaders.contentTypeHeader] =
@@ -1895,6 +1898,7 @@ class WooCommerce{
     request.body = json.encode(data);
     String response =
     await client.send(request).then((res) => res.stream.bytesToString());
+    _printToLog('Response POST => $endPoint <= ${response.toString()}');
     var dataResponse = await json.decode(response);
     _handleError(dataResponse);
     return dataResponse;
