@@ -112,7 +112,7 @@ export 'models/user.dart' show WooUser;
 ///  ```
 
 
-class WooCommerce{
+class WooCommerce {
 
   /// Parameter, [baseUrl] is the base url of your site. For example, http://me.com or https://me.com.
   String baseUrl;
@@ -154,7 +154,7 @@ class WooCommerce{
     }
   }
 
-  void _printToLog(String message) {
+  void printToLog(String message) {
     if (isDebug) {
       print("WOOCOMMERCE LOG : " + message);
     }
@@ -210,7 +210,7 @@ class WooCommerce{
     WooCustomer customer;
     try {
       var response = await authenticateViaJWT(username: username, password: password);
-      _printToLog('attempted token : '+ response.toString());
+      printToLog('attempted token : '+ response.toString());
       if (response is String){
         int id = await fetchLoggedInUserId();
         customer = await getCustomerById(id: id);
@@ -246,7 +246,7 @@ class WooCommerce{
       if (jsonStr.length == 0)
         throw new WooCommerceError(
             code: 'wp_empty_user', message: "No user found or you dont have permission");
-      _printToLog('account user fetch : '+jsonStr.toString());
+      printToLog('account user fetch : '+jsonStr.toString());
       return jsonStr['id'];
     } else {
         WooCommerceError err =
@@ -279,7 +279,7 @@ class WooCommerce{
     String response =
     await client.send(request).then((res) => res.stream.bytesToString());
     var dataResponse = await json.decode(response);
-    _printToLog('registerNewUser response : '+dataResponse.toString());
+    printToLog('registerNewUser response : '+dataResponse.toString());
     if(dataResponse['data']==null){
       return true;
     }
@@ -295,10 +295,10 @@ class WooCommerce{
   ///
   /// Accepts a customer object as required parameter.
   Future<bool> createCustomer (WooCustomer customer) async{
-    _printToLog('Creating Customer With info : ' + customer.toString());
-    _setApiResourceUrl(path: 'customers');
+    printToLog('Creating Customer With info : ' + customer.toString());
+    setApiResourceUrl(path: 'customers');
     final response = await post(queryUri.toString(), customer.toJson());
-    _printToLog('created customer : '+response.toString());
+    printToLog('created customer : '+response.toString());
     final cus = WooCustomer.fromJson(response);
     if (cus is WooCustomer){
       return true;
@@ -334,13 +334,13 @@ class WooCommerce{
     });
 
     List<WooCustomer> customers = [];
-    _setApiResourceUrl(path: 'customers', queryParameters: payload);
+    setApiResourceUrl(path: 'customers', queryParameters: payload);
 
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     for(var c in response){
       var customer = WooCustomer.fromJson(c);
-      _printToLog('customers here : '+customer.toString());
+      printToLog('customers here : '+customer.toString());
       customers.add(customer);
     }
     return customers;
@@ -349,7 +349,7 @@ class WooCommerce{
   /// Returns a [WooCustomer], whoose [id] is specified.
   Future<WooCustomer>getCustomerById({@required int id}) async{
     WooCustomer customer;
-    _setApiResourceUrl(path: 'customers/'+id.toString(),);
+    setApiResourceUrl(path: 'customers/'+id.toString(),);
     final response = await get(queryUri.toString());
     customer = WooCustomer.fromJson(response);
     return customer;
@@ -362,13 +362,13 @@ class WooCommerce{
   Future<List<WooCustomerDownload>> getCustomerDownloads({@required int customerId}) async{
 
     List<WooCustomerDownload> customerDownloads = [];
-    _setApiResourceUrl(path: 'customers/'+customerId.toString()+'/downloads');
+    setApiResourceUrl(path: 'customers/'+customerId.toString()+'/downloads');
 
     final response = await get(queryUri.toString());
-    _printToLog('getting customer downloads : '+response.toString());
+    printToLog('getting customer downloads : '+response.toString());
     for(var d in response){
       var download = WooCustomerDownload.fromJson(d);
-      _printToLog('download gotten here : '+download.toString());
+      printToLog('download gotten here : '+download.toString());
       customerDownloads.add(download);
     }
     return customerDownloads;
@@ -379,15 +379,15 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#customer-properties.
 
   Future<WooCustomer> oldUpdateCustomer ({@required WooCustomer wooCustomer}) async{
-    _printToLog('Updating customer With customerId : ' + wooCustomer.id.toString());
-    _setApiResourceUrl(path: 'customers/'+wooCustomer.id.toString(),);
+    printToLog('Updating customer With customerId : ' + wooCustomer.id.toString());
+    setApiResourceUrl(path: 'customers/'+wooCustomer.id.toString(),);
     final response = await put(queryUri.toString(), wooCustomer.toJson());
     return WooCustomer.fromJson(response);
   }
 
   Future<WooCustomer> updateCustomer ({@required int id, Map data}) async{
-    _printToLog('Updating customer With customerId : ' + id.toString());
-    _setApiResourceUrl(path: 'customers/'+id.toString(),);
+    printToLog('Updating customer With customerId : ' + id.toString());
+    setApiResourceUrl(path: 'customers/'+id.toString(),);
     final response = await put(queryUri.toString(), data);
     return WooCustomer.fromJson(response);
   }
@@ -401,8 +401,8 @@ class WooCommerce{
       'force': true,
     };
     if(reassign !=null) data['reassign'] = reassign;
-    _printToLog('Deleting customer With customerId : ' + customerId.toString());
-    _setApiResourceUrl(path: 'customers/'+customerId.toString(),);
+    printToLog('Deleting customer With customerId : ' + customerId.toString());
+    setApiResourceUrl(path: 'customers/'+customerId.toString(),);
     final response = await delete(queryUri.toString(), data);
     return WooCustomer.fromJson(response);
   }
@@ -463,15 +463,15 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
 
-    _printToLog("Parameters: " + payload.toString());
+    printToLog("Parameters: " + payload.toString());
     List<WooProduct> products =[];
-    _setApiResourceUrl(path: 'products', queryParameters: payload);
+    setApiResourceUrl(path: 'products', queryParameters: payload);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
-    _printToLog('this is the queri uri : '+queryUri.toString());
+    printToLog('response gotten : '+response.toString());
+    printToLog('this is the queri uri : '+queryUri.toString());
     for(var p in response){
       var prod = WooProduct.fromJson(p);
-      _printToLog('product gotten here : '+prod.name.toString());
+      printToLog('product gotten here : '+prod.name.toString());
       products.add(prod);
     }
     return products;
@@ -480,7 +480,7 @@ class WooCommerce{
   /// Returns a [WooProduct], with the specified [id].
   Future<WooProduct>getProductById({@required int id}) async{
     WooProduct product;
-    _setApiResourceUrl(path: 'products/'+id.toString(),);
+    setApiResourceUrl(path: 'products/'+id.toString(),);
     final response = await get(queryUri.toString());
     product = WooProduct.fromJson(response);
     return product;
@@ -526,12 +526,12 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooProductVariation> productVariations = [];
-    _setApiResourceUrl(path: 'products/'+productId.toString()+'/variations', queryParameters: payload);
-    _printToLog('this is the curent path : '+this.apiPath);
+    setApiResourceUrl(path: 'products/'+productId.toString()+'/variations', queryParameters: payload);
+    printToLog('this is the curent path : '+this.apiPath);
     final response = await get(queryUri.toString());
     for(var v in response){
       var prodv = WooProductVariation.fromJson(v);
-      _printToLog('prod gotten here : '+prodv.toString());
+      printToLog('prod gotten here : '+prodv.toString());
       productVariations.add(prodv);
     }
     return productVariations;
@@ -541,9 +541,9 @@ class WooCommerce{
 
   Future<WooProductVariation>getProductVariationById({@required int productId, variationId}) async{
     WooProductVariation productVariation;
-    _setApiResourceUrl(path: 'products/'+productId.toString()+'/variations/'+variationId.toString(),);
+    setApiResourceUrl(path: 'products/'+productId.toString()+'/variations/'+variationId.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
 
     productVariation = WooProductVariation.fromJson(response);
     return productVariation;
@@ -553,12 +553,12 @@ class WooCommerce{
 
   Future<List<WooProductVariation>>getProductVariationsByProductId({@required int productId}) async{
     List<WooProductVariation> productVariations = [];
-    _setApiResourceUrl(path: 'products/'+productId.toString()+'/variations/');
+    setApiResourceUrl(path: 'products/'+productId.toString()+'/variations/');
     final response = await get(queryUri.toString());
 
     for(var v in response){
       var prodv = WooProductVariation.fromJson(v);
-      _printToLog('prod gotten here : '+prodv.toString());
+      printToLog('prod gotten here : '+prodv.toString());
       productVariations.add(prodv);
     }
     return productVariations;
@@ -570,11 +570,11 @@ class WooCommerce{
 
   Future<List<WooProductAttribute>> getProductAttributes() async {
     List<WooProductAttribute> productAttributes = [];
-    _setApiResourceUrl(path: 'products/attributes',);
+    setApiResourceUrl(path: 'products/attributes',);
     final response = await get(queryUri.toString());
     for(var a in response){
       var att = WooProductAttribute.fromJson(a);
-      _printToLog('prod gotten here : '+att.toString());
+      printToLog('prod gotten here : '+att.toString());
       productAttributes.add(att);
     }
     return productAttributes;
@@ -584,9 +584,9 @@ class WooCommerce{
 
   Future<WooProductAttribute>getProductAttributeById({@required int attributeId}) async{
     WooProductAttribute productAttribute;
-    _setApiResourceUrl(path: 'products/attributes/'+attributeId.toString(),);
+    setApiResourceUrl(path: 'products/attributes/'+attributeId.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
 
     productAttribute = WooProductAttribute.fromJson(response);
     return productAttribute;
@@ -619,11 +619,11 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooProductAttributeTerm> productAttributeTerms = [];
-    _setApiResourceUrl(path: 'products/attributes/'+attributeId.toString()+'/terms', queryParameters: payload);
+    setApiResourceUrl(path: 'products/attributes/'+attributeId.toString()+'/terms', queryParameters: payload);
     final response = await get(queryUri.toString());
     for(var t in response){
       var term = WooProductAttributeTerm.fromJson(t);
-      _printToLog('term gotten here : '+term.toString());
+      printToLog('term gotten here : '+term.toString());
       productAttributeTerms.add(term);
     }
     return productAttributeTerms;
@@ -633,9 +633,9 @@ class WooCommerce{
 
   Future<WooProductAttributeTerm>getProductAttributeTermById({@required int attributeId, termId}) async{
     WooProductAttributeTerm productAttributeTerm;
-    _setApiResourceUrl(path: 'products/attributes/'+attributeId.toString()+'/terms/'+termId.toString(),);
+    setApiResourceUrl(path: 'products/attributes/'+attributeId.toString()+'/terms/'+termId.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
 
     productAttributeTerm = WooProductAttributeTerm.fromJson(response);
     return productAttributeTerm;
@@ -669,13 +669,13 @@ class WooCommerce{
     });
 
     List<WooProductCategory> productCategories = [];
-    _printToLog('payload : '+payload.toString());
-    _setApiResourceUrl(path: 'products/categories', queryParameters: payload);
-    _printToLog('this is the path : '+this.apiPath);
+    printToLog('payload : '+payload.toString());
+    setApiResourceUrl(path: 'products/categories', queryParameters: payload);
+    printToLog('this is the path : '+this.apiPath);
     final response = await get(queryUri.toString());
     for(var c in response){
       var cat = WooProductCategory.fromJson(c);
-      _printToLog('category gotten here : '+cat.toString());
+      printToLog('category gotten here : '+cat.toString());
       productCategories.add(cat);
     }
     return productCategories;
@@ -685,9 +685,9 @@ class WooCommerce{
 
   Future<WooProductCategory>getProductCategoryById({@required int categoryId}) async{
     WooProductCategory productCategory;
-    _setApiResourceUrl(path: 'products/categories/'+categoryId.toString(),);
+    setApiResourceUrl(path: 'products/categories/'+categoryId.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     productCategory = WooProductCategory.fromJson(response);
     return productCategory;
   }
@@ -718,12 +718,12 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooProductShippingClass> productShippingClasses = [];
-    _setApiResourceUrl(path: 'products/shipping_classes',);
+    setApiResourceUrl(path: 'products/shipping_classes',);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     for(var c in response){
       var sClass = WooProductShippingClass.fromJson(c);
-      _printToLog('prod gotten here : '+sClass.toString());
+      printToLog('prod gotten here : '+sClass.toString());
       productShippingClasses.add(sClass);
     }
     return productShippingClasses;
@@ -733,9 +733,9 @@ class WooCommerce{
 
   Future<WooProductShippingClass>getProductShippingClassById({@required int id}) async{
     WooProductShippingClass productShippingClass;
-    _setApiResourceUrl(path: 'products/shipping_classes/'+id.toString(),);
+    setApiResourceUrl(path: 'products/shipping_classes/'+id.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     productShippingClass = WooProductShippingClass.fromJson(response);
     return productShippingClass;
   }
@@ -766,13 +766,13 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooProductTag> productTags = [];
-    _printToLog('making request with payload : '+payload.toString());
-    _setApiResourceUrl(path: 'products/tags', queryParameters: payload);
+    printToLog('making request with payload : '+payload.toString());
+    setApiResourceUrl(path: 'products/tags', queryParameters: payload);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     for(var c in response){
       var tag = WooProductTag.fromJson(c);
-      _printToLog('prod gotten here : '+tag.toString());
+      printToLog('prod gotten here : '+tag.toString());
       productTags.add(tag);
     }
     return productTags;
@@ -782,9 +782,9 @@ class WooCommerce{
 
   Future<WooProductTag>getProductTagById({@required int id}) async{
     WooProductTag productTag;
-    _setApiResourceUrl(path: 'products/tags/'+id.toString(),);
+    setApiResourceUrl(path: 'products/tags/'+id.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     productTag = WooProductTag.fromJson(response);
     return productTag;
   }
@@ -811,9 +811,9 @@ class WooCommerce{
     });
 
     WooProductReview productReview;
-    _setApiResourceUrl(path: 'products/reviews',);
+    setApiResourceUrl(path: 'products/reviews',);
     final response = await post(queryUri.toString(), payload);
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     productReview = WooProductReview.fromJson(response);
     return productReview;
   }
@@ -856,10 +856,10 @@ class WooCommerce{
     List<WooProductReview> productReviews = [];
     //_setApiResourceUrl(path: 'products/reviews', queryParameters: payload);
     final response = await get(meQueryPath);
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     for(var r in response){
       var rev = WooProductReview.fromJson(r);
-      _printToLog('reviews gotten here : '+rev.toString());
+      printToLog('reviews gotten here : '+rev.toString());
       productReviews.add(rev);
     }
     return productReviews;
@@ -871,9 +871,9 @@ class WooCommerce{
 
   Future<WooProductReview>getProductReviewById({@required int reviewId}) async{
     WooProductReview productReview;
-    _setApiResourceUrl(path: 'products/reviews/'+reviewId.toString(),);
+    setApiResourceUrl(path: 'products/reviews/'+reviewId.toString(),);
     final response = await get(queryUri.toString());
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     productReview = WooProductReview.fromJson(response);
     return productReview;
   }
@@ -883,8 +883,8 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#product-reviews
 
   Future<WooProductReview> updateProductReview ({@required WooProductReview productReview}) async{
-    _printToLog('Updating product review With reviewId : ' + productReview.id.toString());
-    _setApiResourceUrl(path: 'products/reviews/'+productReview.id.toString(),);
+    printToLog('Updating product review With reviewId : ' + productReview.id.toString());
+    setApiResourceUrl(path: 'products/reviews/'+productReview.id.toString(),);
     final response = await put(queryUri.toString(), productReview.toJson());
     return WooProductReview.fromJson(response);
   }
@@ -897,8 +897,8 @@ class WooCommerce{
     Map data = {
       'force': true,
     };
-    _printToLog('Deleting product review With reviewId : ' + reviewId.toString());
-    _setApiResourceUrl(path: 'products/review/'+reviewId.toString(),);
+    printToLog('Deleting product review With reviewId : ' + reviewId.toString());
+    setApiResourceUrl(path: 'products/review/'+reviewId.toString(),);
     final response = await delete(queryUri.toString(), data);
     return WooProductReview.fromJson(response);
   }
@@ -937,7 +937,7 @@ class WooCommerce{
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
 
-      _printToLog('added to my cart : '+jsonStr.toString());
+      printToLog('added to my cart : '+jsonStr.toString());
       return WooCartItem.fromJson(jsonStr);
     } else {
       WooCommerceError err =
@@ -960,17 +960,17 @@ class WooCommerce{
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
       List<WooCartItem> cartItems =[];
-      _printToLog('response gotten : '+response.toString());
+      printToLog('response gotten : '+response.toString());
       for(var p in jsonStr){
         var prod = WooCartItem.fromJson(p);
-        _printToLog('prod gotten here : '+prod.name.toString());
+        printToLog('prod gotten here : '+prod.name.toString());
         cartItems.add(prod);
       }
 
-      _printToLog('account user fetch : '+jsonStr.toString());
+      printToLog('account user fetch : '+jsonStr.toString());
       return cartItems;
     } else {
-      _printToLog(' error : '+response.body);
+      printToLog(' error : '+response.body);
       WooCommerceError err =
       WooCommerceError.fromJson(json.decode(response.body));
       throw err;
@@ -986,13 +986,13 @@ class WooCommerce{
     WooCart cart;
     final response =
     await http.get(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart'), headers: _urlHeader);
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
       cart = WooCart.fromJson(jsonStr);
       return cart;
     } else {
-      _printToLog(' error : '+response.body);
+      printToLog(' error : '+response.body);
       WooCommerceError err =
       WooCommerceError.fromJson(json.decode(response.body));
       throw err;
@@ -1004,16 +1004,16 @@ class WooCommerce{
     Map<String, dynamic> data = {
       'key' : key,
     };
-    _printToLog('Deleting CartItem With Payload : ' + data.toString());
+    printToLog('Deleting CartItem With Payload : ' + data.toString());
     await getAuthTokenFromDb();
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
 
     final http.Response response =
     await http.delete(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key), headers: _urlHeader,);
-    _printToLog('response of delete cart  : '+response.body.toString());
+    printToLog('response of delete cart  : '+response.body.toString());
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      _printToLog('response of delete cart oooo   : '+response.body.toString());
+      printToLog('response of delete cart oooo   : '+response.body.toString());
       //final jsonStr = json.decode(response.body);
 
       //_printToLog('added to my cart : '+jsonStr.toString());
@@ -1034,7 +1034,7 @@ class WooCommerce{
 
     final http.Response response =
     await http.delete(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'), headers: _urlHeader,);
-    _printToLog('response of delete cart  : '+response.body.toString());
+    printToLog('response of delete cart  : '+response.body.toString());
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.body;
@@ -1055,13 +1055,13 @@ class WooCommerce{
     WooCartItem cartItem;
     final response =
     await http.get(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key), headers: _urlHeader);
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
       cartItem = WooCartItem.fromJson(jsonStr);
       return cartItem;
     } else {
-      _printToLog('error : '+response.body);
+      printToLog('error : '+response.body);
       WooCommerceError err =
       WooCommerceError.fromJson(json.decode(response.body));
       throw err;
@@ -1085,7 +1085,7 @@ class WooCommerce{
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
 
-      _printToLog('added to my cart : '+jsonStr.toString());
+      printToLog('added to my cart : '+jsonStr.toString());
       return WooCartItem.fromJson(jsonStr);
     } else {
       WooCommerceError err =
@@ -1099,11 +1099,11 @@ class WooCommerce{
     data["cart_item_data"] = {
       "type": "booking"
     };
-    _setApiResourceUrl(path: 'booking/add-to-cart', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'booking/add-to-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK') {
-      _printToLog('added to my cart : ' + wooRes.toString());
+      printToLog('added to my cart : ' + wooRes.toString());
       return wooRes;
     } else {
       WooCommerceError err =
@@ -1123,11 +1123,11 @@ class WooCommerce{
     };
     if (variation != null) data['variation'] = variation;
     if(variationId != null) data['variation_id'] = variationId;
-    _setApiResourceUrl(path: 'cart/add-to-cart', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'cart/add-to-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes.code == 'ft_add_to_cart_ok' || wooRes.code == 'OK') {
-      _printToLog('added to my cart : ' + wooRes.toString());
+      printToLog('added to my cart : ' + wooRes.toString());
       return wooRes;
     } else {
       WooCommerceError err =
@@ -1141,12 +1141,12 @@ class WooCommerce{
       "cart_item_key": key,
       "quantity": quantity
     };
-    _setApiResourceUrl(path: 'cart/update-item-cart', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'cart/update-item-cart', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK'
       || wooRes?.code == 'wc_cart_rest_remove_item') {
-      _printToLog('added to my cart : ' + wooRes.toString());
+      printToLog('added to my cart : ' + wooRes.toString());
       return wooRes;
     } else {
       WooCommerceError err =
@@ -1156,7 +1156,7 @@ class WooCommerce{
   }
 
   Future<WooBaseResponse> clearCart() async {
-    _setApiResourceUrl(path: 'cart/clear-cart', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'cart/clear-cart', hostType: HostType.CUSTOM);
     final response = await get(queryUri.toString());
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK') {
@@ -1169,7 +1169,7 @@ class WooCommerce{
   }
 
   Future<List<WooCartLine>> getCart() async {
-    _setApiResourceUrl(
+    setApiResourceUrl(
         path: 'cart/get-cart',
         queryParameters: { 'thumb': 'true' },
         hostType: HostType.CUSTOM);
@@ -1191,7 +1191,7 @@ class WooCommerce{
 
 
   Future<WooAccount> updateProfile (WooAccountRequest account) async{
-    _setApiResourceUrl(path: 'auth/update', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'auth/update', hostType: HostType.CUSTOM);
     final response = await post(queryUri.toString(), account.toJson());
     return WooAccount.fromJson(response['data']['user_info']);
     // return WooOrder.fromJson(response);
@@ -1199,7 +1199,7 @@ class WooCommerce{
 
 
   Future<WooAccount> getProfile() async{
-    _setApiResourceUrl(path: 'auth/me', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'auth/me', hostType: HostType.CUSTOM);
     final response = await get(queryUri.toString());
     return WooAccount.fromJson(response['data']['user_info']);
   }
@@ -1208,15 +1208,15 @@ class WooCommerce{
   ///
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#orders.
   Future<WooOrder> createOrder (WooOrderPayload orderPayload) async{
-    _printToLog('Creating Order With Payload : ' + orderPayload.toString());
-    _setApiResourceUrl(path: 'orders',);
+    printToLog('Creating Order With Payload : ' + orderPayload.toString());
+    setApiResourceUrl(path: 'orders',);
     final response = await post(queryUri.toString(), orderPayload.toJson());
     return WooOrder.fromJson(response);
   }
 
   Future<dynamic> createOrderCustomize (WooOrderPayload orderPayload) async{
-    _printToLog('Creating Order With Payload : ' + orderPayload.toString());
-    _setApiResourceUrl(path: 'order/create-order', hostType: HostType.CUSTOM);
+    printToLog('Creating Order With Payload : ' + orderPayload.toString());
+    setApiResourceUrl(path: 'order/create-order', hostType: HostType.CUSTOM);
     // var orderPayload.toJson().removeWhere((key, value) => key == null || value == null);
     final response = await post(queryUri.toString(), orderPayload.toJson());
     return response;
@@ -1257,12 +1257,12 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooOrder>orders = [];
-    _printToLog('Getting Order With Payload : ' + payload.toString());
-    _setApiResourceUrl(path: 'orders', queryParameters: payload);
+    printToLog('Getting Order With Payload : ' + payload.toString());
+    setApiResourceUrl(path: 'orders', queryParameters: payload);
     final response = await get(queryUri.toString());
     for(var o in response){
       var order = WooOrder.fromJson(o);
-      _printToLog('order gotten here : '+order.toString());
+      printToLog('order gotten here : '+order.toString());
       orders.add(order);
     }
     return orders;
@@ -1273,7 +1273,7 @@ class WooCommerce{
   Future<WooOrder> getOrderById(int id, {String dp}) async {
     Map<String, dynamic> payload = {};
     if (dp != null) payload["dp"] = dp;
-    _setApiResourceUrl(path: 'orders/'+id.toString(),queryParameters: payload);
+    setApiResourceUrl(path: 'orders/'+id.toString(),queryParameters: payload);
     final response = await get(queryUri.toString());
     return WooOrder.fromJson(response);
   }
@@ -1283,15 +1283,15 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#orders.
 
   Future<WooOrder> oldUpdateOrder (WooOrder order) async{
-    _printToLog('Updating Order With Payload : ' + order.toString());
-    _setApiResourceUrl(path: 'orders/'+order.id.toString(),);
+    printToLog('Updating Order With Payload : ' + order.toString());
+    setApiResourceUrl(path: 'orders/'+order.id.toString(),);
     final response = await put(queryUri.toString(), order.toJson());
     return WooOrder.fromJson(response);
   }
 
   Future<WooOrder> updateOrder ({Map orderMap, int id}) async{
-    _printToLog('Updating Order With Payload : ' + orderMap.toString());
-    _setApiResourceUrl(path: 'orders/'+id.toString(),);
+    printToLog('Updating Order With Payload : ' + orderMap.toString());
+    setApiResourceUrl(path: 'orders/'+id.toString(),);
     final response = await put(queryUri.toString(), orderMap);
     return WooOrder.fromJson(response);
   }
@@ -1304,8 +1304,8 @@ class WooCommerce{
     Map data = {
       'force': true,
     };
-    _printToLog('Deleting Order With Id : ' + orderId.toString());
-    _setApiResourceUrl(path: 'orders/'+orderId.toString(),);
+    printToLog('Deleting Order With Id : ' + orderId.toString());
+    setApiResourceUrl(path: 'orders/'+orderId.toString(),);
     final response = await delete(queryUri.toString(), data);
     return WooOrder.fromJson(response);
   }
@@ -1332,9 +1332,9 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     WooCoupon coupon;
-    _setApiResourceUrl(path: 'coupons',);
+    setApiResourceUrl(path: 'coupons',);
     final response = await post(queryUri.toString(), payload);
-    _printToLog('response gotten : '+response.toString());
+    printToLog('response gotten : '+response.toString());
     coupon = WooCoupon.fromJson(response);
     return coupon;
   }
@@ -1366,12 +1366,12 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooCoupon>coupons;
-    _printToLog('Getting Coupons With Payload : ' + payload.toString());
-    _setApiResourceUrl(path: 'coupons', queryParameters: payload);
+    printToLog('Getting Coupons With Payload : ' + payload.toString());
+    setApiResourceUrl(path: 'coupons', queryParameters: payload);
     final response = await get(queryUri.toString());
     for(var c in response){
       var coupon = WooCoupon.fromJson(c);
-      _printToLog('prod gotten here : '+order.toString());
+      printToLog('prod gotten here : '+order.toString());
       coupons.add(coupon);
     }
     return coupons;
@@ -1379,7 +1379,7 @@ class WooCommerce{
 
   /// Returns a [WooCoupon] object with the specified [id].
   Future<WooCoupon> getCouponById(int id) async {
-    _setApiResourceUrl(path: 'coupons/'+id.toString());
+    setApiResourceUrl(path: 'coupons/'+id.toString());
     final response = await get(queryUri.toString());
     return WooCoupon.fromJson(response);
   }
@@ -1403,12 +1403,12 @@ class WooCommerce{
       if(v != null) payload[k] = v.toString();
     });
     List<WooTaxRate> taxRates = [];
-    _printToLog('Getting Taxrates With Payload : ' + payload.toString());
-    _setApiResourceUrl(path: 'taxes', queryParameters: payload);
+    printToLog('Getting Taxrates With Payload : ' + payload.toString());
+    setApiResourceUrl(path: 'taxes', queryParameters: payload);
     final response = await get(queryUri.toString());
     for(var t in response){
       var tax = WooTaxRate.fromJson(t);
-      _printToLog('prod gotten here : '+order.toString());
+      printToLog('prod gotten here : '+order.toString());
       taxRates.add(tax);
     }
     return taxRates;
@@ -1417,7 +1417,7 @@ class WooCommerce{
   /// Returns a [WooTaxRate] object matching the specified [id].
 
   Future<WooTaxRate> getTaxRateById(int id) async {
-    _setApiResourceUrl(path: 'taxes/'+id.toString());
+    setApiResourceUrl(path: 'taxes/'+id.toString());
     final response = await get(queryUri.toString());
     return WooTaxRate.fromJson(response);
   }
@@ -1427,11 +1427,11 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#tax-classes.
   Future<List<WooTaxClass>> getTaxClasses() async {
     List<WooTaxClass> taxClasses = [];
-    _setApiResourceUrl(path: 'taxes/classes');
+    setApiResourceUrl(path: 'taxes/classes');
     final response = await get(queryUri.toString());
     for(var t in response){
       var tClass = WooTaxClass.fromJson(t);
-      _printToLog('tax class gotten here : '+tClass.toString());
+      printToLog('tax class gotten here : '+tClass.toString());
       taxClasses.add(tClass);
     }
     return taxClasses;
@@ -1443,11 +1443,11 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#shipping-zones.
   Future<List<WooShippingZone>> getShippingZones() async {
     List<WooShippingZone> shippingZones = [];
-    _setApiResourceUrl(path: 'shipping/zones');
+    setApiResourceUrl(path: 'shipping/zones');
     final response = await get(queryUri.toString());
     for(var z in response){
       var sZone = WooShippingZone.fromJson(z);
-      _printToLog('shipping zones gotten here : '+sZone.toString());
+      printToLog('shipping zones gotten here : '+sZone.toString());
       shippingZones.add(sZone);
     }
     return shippingZones;
@@ -1458,7 +1458,7 @@ class WooCommerce{
 
   Future<WooShippingZone> getShippingZoneById(int id) async {
     WooShippingZone shippingZone;
-    _setApiResourceUrl(path: 'shipping/zones/'+id.toString());
+    setApiResourceUrl(path: 'shipping/zones/'+id.toString());
     final response = await get(queryUri.toString());
     shippingZone = WooShippingZone.fromJson(response);
     return shippingZone;
@@ -1470,11 +1470,11 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#shipping-methods.
   Future<List<WooShippingMethod>> getShippingMethods() async {
     List<WooShippingMethod> shippingMethods = [];
-    _setApiResourceUrl(path: 'shipping_methods');
+    setApiResourceUrl(path: 'shipping_methods');
     final response = await get(queryUri.toString());
     for(var z in response){
       var sMethod = WooShippingMethod.fromJson(z);
-      _printToLog('shipping methods gotten here : '+sMethod.toString());
+      printToLog('shipping methods gotten here : '+sMethod.toString());
       shippingMethods.add(sMethod);
     }
     return shippingMethods;
@@ -1484,7 +1484,7 @@ class WooCommerce{
 
   Future<WooShippingMethod> getShippingMethodById(int id) async {
     WooShippingMethod shippingMethod;
-    _setApiResourceUrl(path: 'shipping_methods/'+id.toString());
+    setApiResourceUrl(path: 'shipping_methods/'+id.toString());
     final response = await get(queryUri.toString());
     shippingMethod = WooShippingMethod.fromJson(response);
     return shippingMethod;
@@ -1495,11 +1495,11 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#shipping-zone-locations.
   Future<List<WooShippingZoneMethod>> getAllShippingZoneMethods({@required int shippingZoneId}) async {
     List<WooShippingZoneMethod> shippingZoneMethods = [];
-    _setApiResourceUrl(path: 'shipping/zones/'+shippingZoneId.toString()+'/methods');
+    setApiResourceUrl(path: 'shipping/zones/'+shippingZoneId.toString()+'/methods');
     final response = await get(queryUri.toString());
     for(var l in response){
       var sMethod = WooShippingZoneMethod.fromJson(l);
-      _printToLog('shipping zone locations gotten here : '+ sMethod.toString());
+      printToLog('shipping zone locations gotten here : '+ sMethod.toString());
       shippingZoneMethods.add(sMethod);
     }
     return shippingZoneMethods;
@@ -1509,7 +1509,7 @@ class WooCommerce{
 
   Future<WooShippingZoneMethod> getAShippingMethodFromZone({@required int zoneId, @required int methodId}) async {
     WooShippingZoneMethod shippingZoneMethod;
-    _setApiResourceUrl(path: 'shipping/zones/'+zoneId.toString()+ 'methods/'+ methodId.toString());
+    setApiResourceUrl(path: 'shipping/zones/'+zoneId.toString()+ 'methods/'+ methodId.toString());
     final response = await get(queryUri.toString());
     shippingZoneMethod = WooShippingZoneMethod.fromJson(response);
     return shippingZoneMethod;
@@ -1523,8 +1523,8 @@ class WooCommerce{
     Map data = {
       'force': true,
     };
-    _printToLog('Deleting shipping zone method with zoneId : ' + zoneId.toString());
-    _setApiResourceUrl(path: 'shipping/zones/'+zoneId.toString()+ 'methods/'+ methodId.toString());
+    printToLog('Deleting shipping zone method with zoneId : ' + zoneId.toString());
+    setApiResourceUrl(path: 'shipping/zones/'+zoneId.toString()+ 'methods/'+ methodId.toString());
     final response = await delete(queryUri.toString(), data);
     return WooShippingZoneMethod.fromJson(response);
   }
@@ -1534,11 +1534,11 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#shipping-zone-locations.
   Future<List<WooShippingZoneLocation>> getShippingZoneLocations({@required int shippingZoneId}) async {
     List<WooShippingZoneLocation> shippingZoneLocations = [];
-    _setApiResourceUrl(path: 'shipping/zones/'+shippingZoneId.toString()+'/locations');
+    setApiResourceUrl(path: 'shipping/zones/'+shippingZoneId.toString()+'/locations');
     final response = await get(queryUri.toString());
     for(var l in response){
       var sZoneLocation = WooShippingZoneLocation.fromJson(l);
-      _printToLog('shipping zone locations gotten here : '+sZoneLocation.toString());
+      printToLog('shipping zone locations gotten here : '+sZoneLocation.toString());
       shippingZoneLocations.add(sZoneLocation);
     }
     return shippingZoneLocations;
@@ -1550,11 +1550,11 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-payment-gateways.
   Future<List<WooPaymentGateway>> getPaymentGateways() async {
     List<WooPaymentGateway> gateways = [];
-    _setApiResourceUrl(path: 'payment_gateways');
+    setApiResourceUrl(path: 'payment_gateways');
     final response = await get(queryUri.toString());
     for(var g in response){
       var sMethod = WooPaymentGateway.fromJson(g);
-      _printToLog('shipping zone locations gotten here : '+ sMethod.toString());
+      printToLog('shipping zone locations gotten here : '+ sMethod.toString());
       gateways.add(sMethod);
     }
     return gateways;
@@ -1565,7 +1565,7 @@ class WooCommerce{
 
   Future<WooPaymentGateway> getPaymentGatewayById(int id) async {
     WooPaymentGateway paymentGateway;
-    _setApiResourceUrl(path: 'payment_gateways/'+id.toString());
+    setApiResourceUrl(path: 'payment_gateways/'+id.toString());
     final response = await get(queryUri.toString());
     paymentGateway = WooPaymentGateway.fromJson(response);
     return paymentGateway;
@@ -1576,8 +1576,8 @@ class WooCommerce{
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#orders.
 
   Future<WooPaymentGateway> updatePaymentGateway (WooPaymentGateway gateway) async{
-    _printToLog('Updating Payment Gateway With Payload : ' + gateway.toString());
-    _setApiResourceUrl(path: 'payment_gateways/'+gateway.id,);
+    printToLog('Updating Payment Gateway With Payload : ' + gateway.toString());
+    setApiResourceUrl(path: 'payment_gateways/'+gateway.id,);
     final response = await put(queryUri.toString(), gateway.toJson());
     return WooPaymentGateway.fromJson(response);
   }
@@ -1587,13 +1587,13 @@ class WooCommerce{
   /// Get booking slots
   /// @minDate yyyy-mm-dd
   /// @maxDate yyy-mm-dd
-  Future<List<Slot>> getSlots({String minDate, String maxDate, int productIds}) async {
-    _setApiResourceUrl(path: 'products/slots', hostType: HostType.BOOKING,
+  Future<List<Slot>> getSlots({String minDate, String maxDate, int productIds, int page, int perPage}) async {
+    setApiResourceUrl(path: 'products/slots', hostType: HostType.BOOKING,
     queryParameters: {
       'min_date': minDate,
       'max_date': maxDate,
-      'product_ids': productIds.toString()
-    });
+      'product_ids': productIds?.toString()
+    }.cleanup());
     final response = await get(queryUri.toString());
     // var rep = WooBaseResponse.fromJson(response);
     if (response != null && (response as Map).containsKey('records')) {
@@ -1612,10 +1612,10 @@ class WooCommerce{
         .forEach((k, v) {
       if(v != null) params[k] = v.toString();
     });
-    _printToLog("Parameters: " + params.toString());
-    _setApiResourceUrl(path: 'wishlist/get-wishlist-list', hostType: HostType.CUSTOM, queryParameters: params);
+    printToLog("Parameters: " + params.toString());
+    setApiResourceUrl(path: 'wishlist/get-wishlist-list', hostType: HostType.CUSTOM, queryParameters: params);
     final response = await get(queryUri.toString());
-    _printToLog("Response: " + response.toString());
+    printToLog("Response: " + response.toString());
     List dataItems = (response['data']['data'] as List);
 
     if(dataItems == null || dataItems.isEmpty){
@@ -1625,7 +1625,7 @@ class WooCommerce{
   }
 
   Future<dynamic> addWishlistProductCustomize ({int productId, int productVariation, String productAction, String productType}) async{
-    _setApiResourceUrl(path: 'wishlist/add-to-wishlist', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'wishlist/add-to-wishlist', hostType: HostType.CUSTOM);
     var body = {'product_id': productId, 'product_variation': productVariation,
     'product_action': productAction, 'product_type': productType};
     final response = await post(queryUri.toString(), body);
@@ -1633,7 +1633,7 @@ class WooCommerce{
   }
 
   Future<dynamic> clearWishlistProductCustomize ({int wishlist_id, int id}) async{
-    _setApiResourceUrl(path: 'wishlist/remove-wishlist-item', hostType: HostType.CUSTOM);
+    setApiResourceUrl(path: 'wishlist/remove-wishlist-item', hostType: HostType.CUSTOM);
     var body = {'wishlist_id': wishlist_id, 'ID': id};
     final response = await post(queryUri.toString(), body);
     return response;
@@ -1651,7 +1651,7 @@ class WooCommerce{
     String consumerSecret = this.consumerSecret;
 
     String token = "";
-    _printToLog('oauth token = : '+token);
+    printToLog('oauth token = : '+token);
     String url = this.baseUrl + apiPath + endpoint;
     bool containsQueryParams = url.contains("?");
 
@@ -1782,7 +1782,7 @@ class WooCommerce{
   }
 
   // Sets the Uri for an endpoint.
-  String _setApiResourceUrl({
+  String setApiResourceUrl({
     @required String path,
     String host, port, Map<String, dynamic> queryParameters,
     HostType hostType = HostType.BASE
@@ -1823,7 +1823,7 @@ class WooCommerce{
     getAuthTokenFromDb();
     queryUri = new Uri(path: path, queryParameters: queryParameters, port: port, host: host );
 
-    _printToLog('Query : '+queryUri.toString());
+    printToLog('Query : '+queryUri.toString());
     //queryUri = new Uri.http( path, param);
     return queryUri.toString();
   }
@@ -1855,17 +1855,17 @@ class WooCommerce{
   /// Make a custom get request to a Woocommerce endpoint, using WooCommerce SDK.
 
   Future<dynamic> get(String endPoint) async {
-    _printToLog('Call GET => $endPoint}');
+    printToLog('Call GET => $endPoint}');
     String url = this._getOAuthURL("GET", endPoint);
     String _token = await _localDbService.getSecurityToken();
     String _bearerToken = "Bearer $_token";
-    _printToLog('this is the bearer token : '+_bearerToken);
+    printToLog('this is the bearer token : '+_bearerToken);
     Map<String, String> headers = new HashMap();
     headers.putIfAbsent('Accept', () => 'application/json charset=utf-8');
     // 'Authorization': _bearerToken,
     try {
       final http.Response response = await http.get(Uri.parse(url));
-      _printToLog('Response GET => $endPoint <= ${response.statusCode} | ${response.toString()}');
+      printToLog('Response GET => $endPoint <= ${response.statusCode} | ${response.toString()}');
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
@@ -1894,7 +1894,7 @@ class WooCommerce{
   /// Make a custom post request to Woocommerce, using WooCommerce SDK.
 
   Future<dynamic> post(String endPoint, Map data) async {
-    _printToLog('Call POST => $endPoint | ${data.toString()}');
+    printToLog('Call POST => $endPoint | ${data.toString()}');
 
     String url = this._getOAuthURL("POST", endPoint);
     http.Client client = http.Client();
@@ -1906,7 +1906,7 @@ class WooCommerce{
     request.body = json.encode(data);
     String response =
     await client.send(request).then((res) => res.stream.bytesToString());
-    _printToLog('Response POST => $endPoint <= ${response.toString()}');
+    printToLog('Response POST => $endPoint <= ${response.toString()}');
     var dataResponse = await json.decode(response);
     _handleError(dataResponse);
     return dataResponse;
@@ -1944,7 +1944,7 @@ class WooCommerce{
     request.body = json.encode(data);
     final response =
     await client.send(request).then((res) => res.stream.bytesToString());
-    _printToLog("this is the delete's response : "+response.toString());
+    printToLog("this is the delete's response : "+response.toString());
     var dataResponse = await json.decode(response);
     _handleHttpError(dataResponse);
     return dataResponse;
@@ -1969,7 +1969,7 @@ class WooCommerce{
     if (response.statusCode > 300)
       return Future.error("error: status code ${response.statusCode} ${response.reasonPhrase}");
     final deleteResponse = await response.stream.bytesToString();
-    _printToLog("delete response : "+deleteResponse.toString());
+    printToLog("delete response : "+deleteResponse.toString());
     return deleteResponse;
   }
 
