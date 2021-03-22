@@ -1592,7 +1592,9 @@ class WooCommerce {
     queryParameters: {
       'min_date': minDate,
       'max_date': maxDate,
-      'product_ids': productIds?.toString()
+      'product_ids': productIds?.toString(),
+      'page': page,
+      'limit': perPage
     }.cleanup());
     final response = await get(queryUri.toString());
     // var rep = WooBaseResponse.fromJson(response);
