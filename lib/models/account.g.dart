@@ -41,7 +41,7 @@ WooAccount _$WooAccountFromJson(Map<String, dynamic> json) {
     phone: json['phone'] as String,
     country: json['country'] as String,
     email: json['user_email'] as String,
-    avatar: json['avatarURL'] as String,
+    avatar: json['user_avatar'] as String,
     child: json['child'] == null
         ? null
         : ChildProfile.fromJson(json['child'] as Map<String, dynamic>),
@@ -56,7 +56,7 @@ WooAccount _$WooAccountFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$WooAccountToJson(WooAccount instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'avatarURL': instance.avatar,
+      'user_avatar': instance.avatar,
       'display_name': instance.fullname,
       'nice_name': instance.niceName,
       'user_email': instance.email,

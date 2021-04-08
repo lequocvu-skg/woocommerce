@@ -45,10 +45,10 @@ class WooOrder {
   String version;
   String status;
   String currency;
-  String dateCreated;
-  String dateCreatedGmt;
-  String dateModified;
-  String dateModifiedGmt;
+  dynamic dateCreated;
+  dynamic dateCreatedGmt;
+  dynamic dateModified;
+  dynamic dateModifiedGmt;
   String discountTotal;
   String discountTax;
   String shippingTotal;
@@ -273,6 +273,8 @@ class WooOrder {
     return data;
   }
   @override toString() => this.toJson().toString();
+
+  bool get isPending => status == "pending";
 }
 
 class WooOrderCouponLine {
@@ -490,6 +492,9 @@ class Shipping {
     data['country'] = this.country;
     return data;
   }
+
+  String get fullName => "$firstName $lastName";
+  String get fullAddress => "$address1 $city";
 }
 
 class MetaData {
@@ -559,12 +564,19 @@ class LineItems {
   String total;
   @JsonKey(name: 'total_tax')
   String totalTax;
-  @JsonKey(toJson: taxesToJson, nullable: true)
-  List<Taxes> taxes;
+  // @JsonKey(toJson: taxesToJson, nullable: true)
+  @JsonKey(nullable: true)
+  dynamic taxes;
   @JsonKey(name: 'meta_data', toJson: metaListToJson)
   List<MetaData> metaData;
   String sku;
   int price;
+  @JsonKey(name: 'parent_name')
+  String parentName;
+  @JsonKey(name: 'product_type')
+  String productType; // booking, variable, simple
+  @JsonKey(name: 'booking_ids')
+  List<int> bookingIds;
 
   LineItems(
       {this.id,
@@ -580,7 +592,10 @@ class LineItems {
       this.taxes,
       this.metaData,
       this.sku,
-      this.price});
+      this.price,
+      this.parentName,
+      this.productType,
+      this.bookingIds});
 
   factory LineItems.fromJson(Map<String, dynamic> json) => _$LineItemsFromJson(json);
   Map<String, dynamic> toJson() => _$LineItemsToJson(this);
@@ -709,7 +724,7 @@ class ShippingLines {
   String methodId;
   String total;
   String totalTax;
-  List<Taxes> taxes;
+  dynamic taxes;
   List<MetaData> metaData;
 
   ShippingLines(
@@ -728,7 +743,8 @@ class ShippingLines {
     total = json['total'];
     totalTax = json['total_tax'];
 
-    taxes = (json['taxes'] as List)?.map((i) => Taxes.fromJson(i))?.toList();
+    // taxes = (json['taxes'] as List)?.map((i) => Taxes.fromJson(i))?.toList();
+    taxes = json['taxes'];
     metaData =
         (json['meta_data'] as List)?.map((i) => MetaData.fromJson(i)).toList();
   }

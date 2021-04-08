@@ -490,14 +490,14 @@ class WooCommerce {
   ///
   /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#product-variations
   Future<List<WooProductVariation>> getProductVariations(
-      {@required int productId,
+      { int productId,
         int page,
         int perPage,
         String search,
         String after,
         String before,
         List<int> exclude,
-        List<int> include,
+        String include,
         int offset,
         String order,
         String orderBy,
@@ -515,14 +515,16 @@ class WooCommerce {
 
     ({'page': page, 'per_page': perPage, 'search': search,
       'after': after, 'before': before,
-      'exclude': exclude, 'include': include, 'offset': offset,
+      'exclude': exclude,
+      'include': include != null ? Uri.encodeComponent(include) : include,
+      'offset': offset,
       'order': order, 'orderby': orderBy, 'parent': parent,
       'parent_exclude': parentExclude, 'slug': slug,
       'status': status, 'sku': sku,
        'tax_class': taxClass, 'on_sale': onSale,
       'min_price': minPrice, 'max_price': maxPrice, 'stock_status': stockStatus,
     }
-    ).forEach((k, v) {
+    ).cleanup().forEach((k, v) {
       if(v != null) payload[k] = v.toString();
     });
     List<WooProductVariation> productVariations = [];
@@ -640,6 +642,19 @@ class WooCommerce {
     productAttributeTerm = WooProductAttributeTerm.fromJson(response);
     return productAttributeTerm;
   }
+
+  /// Returns a [WooProductVariation], with the specified [productId] and [variationId].
+
+  Future<WooBooking> getBookingById({@required int bookingId}) async {
+    setApiResourceUrl(path: 'bookings/$bookingId', hostType: HostType.BOOKING);
+    final response = await get(queryUri.toString());
+    if (response != null) {
+      return WooBooking.fromJson(response);
+    } else {
+      throw Exception("Get booking $bookingId error!");
+    }
+  }
+
 
   /// Returns a list of all [WooProductCategory], with filter options.
   ///
@@ -1145,7 +1160,26 @@ class WooCommerce {
     final response = await post(queryUri.toString(), data);
     var wooRes = WooBaseResponse.fromJson(response);
     if (wooRes?.code == 'OK'
-      || wooRes?.code == 'wc_cart_rest_remove_item') {
+      || wooRes?.code == 'ft_update_cart_ok') {
+      printToLog('added to my cart : ' + wooRes.toString());
+      return wooRes;
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(response);
+      throw err;
+    }
+  }
+
+  Future<WooBaseResponse> removeCartItem({@required String key}) async {
+    Map<String, dynamic> data = {
+      "cart_item_key": key,
+      "quantity": 0
+    };
+    setApiResourceUrl(path: 'cart/update-item-cart', hostType: HostType.CUSTOM);
+    final response = await post(queryUri.toString(), data);
+    var wooRes = WooBaseResponse.fromJson(response);
+    if (wooRes?.code == 'OK'
+        || wooRes?.code == 'wc_cart_rest_remove_item') {
       printToLog('added to my cart : ' + wooRes.toString());
       return wooRes;
     } else {
@@ -1214,13 +1248,17 @@ class WooCommerce {
     return WooOrder.fromJson(response);
   }
 
-  Future<dynamic> createOrderCustomize (WooOrderPayload orderPayload) async{
+  ///
+  /// @return OrderId
+  ///
+  Future<int> createOrderCustomize (WooOrderPayload orderPayload) async{
     printToLog('Creating Order With Payload : ' + orderPayload.toString());
     setApiResourceUrl(path: 'order/create-order', hostType: HostType.CUSTOM);
     // var orderPayload.toJson().removeWhere((key, value) => key == null || value == null);
-    final response = await post(queryUri.toString(), orderPayload.toJson());
-    return response;
-    // return WooOrder.fromJson(response);
+    final response = await post(queryUri.toString(), orderPayload.toJson().cleanup());
+    // return response;
+    if ((response as Map).containsKey("id") == false) throw Exception("Create order error!");
+    return response["id"];
   }
 
   /// Returns a list of all [Order], with filter options.
@@ -1268,6 +1306,52 @@ class WooCommerce {
     return orders;
   }
 
+  /// Returns a list of all [Order], with filter options.
+  ///
+  /// Related endpoint: https://woocommerce.github.io/woocommerce-rest-api-docs/#orders
+  Future<List<WooOrder>> getCustomOrders(
+      {int page,
+        int perPage,
+        String search,
+        String after,
+        String before,
+        List<int> exclude,
+        List<int> include,
+        int offset,
+        String order,
+        String orderBy,
+        List<int> parent,
+        List<int> parentExclude,
+        List<String>
+        status, // Options: any, pending, processing, on-hold, completed, cancelled, refunded, failed and trash. Default is any.
+        int customer,
+        int product,
+        int dp}) async {
+    Map<String, dynamic> payload = {};
+
+    ({'page': page, 'limit': perPage, 'search': search,
+      'after': after, 'before': before,
+      'exclude': exclude, 'include': include, 'offset': offset,
+      'order': order, 'orderby': orderBy, 'parent': parent,
+      'parent_exclude': parentExclude, 'status': status != null ? status.join(",") : null,
+      'customer': customer, 'product': product, 'dp': dp,
+    }
+    ).forEach((k, v) {
+      if(v != null) payload[k] = v.toString();
+    });
+    printToLog('Getting Order With Payload : ' + payload.toString());
+    setApiResourceUrl(path: 'order/get-orders', queryParameters: payload, hostType: HostType.CUSTOM);
+    final response = await get(queryUri.toString());
+    var wooResponse = WooBaseResponse.fromJson(response);
+    if (wooResponse.code == 'ft_get_order_ok') {
+      return (wooResponse.data['data'] as List).map((e) => WooOrder.fromJson(e)).toList();
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(response);
+      throw err;
+    }
+  }
+
   /// Returns a [WooOrder] object that matches the provided [id].
 
   Future<WooOrder> getOrderById(int id, {String dp}) async {
@@ -1276,6 +1360,22 @@ class WooCommerce {
     setApiResourceUrl(path: 'orders/'+id.toString(),queryParameters: payload);
     final response = await get(queryUri.toString());
     return WooOrder.fromJson(response);
+  }
+
+  Future<WooOrder> getCustomOrderById(int id, {String dp}) async {
+    Map<String, dynamic> payload = {};
+    if (dp != null) payload["dp"] = dp;
+    setApiResourceUrl(path: 'order/get-order/$id', queryParameters: payload, hostType: HostType.CUSTOM);
+    final response = await get(queryUri.toString());
+
+    var wooResponse = WooBaseResponse.fromJson(response);
+    if (wooResponse.code == 'ft_get_order_ok') {
+      return WooOrder.fromJson(wooResponse.data['data']);
+    } else {
+      WooCommerceError err =
+      WooCommerceError.fromJson(response);
+      throw err;
+    }
   }
 
   /// Updates an existing order and returns the [WooOrder] object.
@@ -1365,7 +1465,7 @@ class WooCommerce {
     ).forEach((k, v) {
       if(v != null) payload[k] = v.toString();
     });
-    List<WooCoupon>coupons;
+    List<WooCoupon> coupons = [];
     printToLog('Getting Coupons With Payload : ' + payload.toString());
     setApiResourceUrl(path: 'coupons', queryParameters: payload);
     final response = await get(queryUri.toString());
@@ -1588,14 +1688,18 @@ class WooCommerce {
   /// @minDate yyyy-mm-dd
   /// @maxDate yyy-mm-dd
   Future<List<Slot>> getSlots({String minDate, String maxDate, int productIds, int page, int perPage}) async {
-    setApiResourceUrl(path: 'products/slots', hostType: HostType.BOOKING,
-    queryParameters: {
+    Map<String, dynamic> params = {};
+    ({
       'min_date': minDate,
       'max_date': maxDate,
       'product_ids': productIds?.toString(),
       'page': page,
       'limit': perPage
-    }.cleanup());
+    }).cleanup().forEach((k, v) {
+      if(v != null) params[k] = v.toString();
+    });
+    setApiResourceUrl(path: 'products/slots', hostType: HostType.BOOKING,
+    queryParameters: params);
     final response = await get(queryUri.toString());
     // var rep = WooBaseResponse.fromJson(response);
     if (response != null && (response as Map).containsKey('records')) {
@@ -1641,6 +1745,12 @@ class WooCommerce {
     return response;
   }
 
+
+  Future<dynamic> updateAvatar(String absPath) async {
+    setApiResourceUrl(path: 'auth/change-avatar', hostType: HostType.CUSTOM);
+    final response = await upload(queryUri.toString(), absPath);
+    return response;
+  }
 
   // Utils session
 
@@ -1888,6 +1998,23 @@ class WooCommerce {
     request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
     String response =
     await client.send(request).then((res) => res.stream.bytesToString());
+    var dataResponse = await json.decode(response);
+    _handleError(dataResponse);
+    return dataResponse;
+  }
+
+  Future<dynamic> upload(String endPoint, String filePath) async {
+    printToLog('Call UPLOAD => $endPoint | ${filePath.toString()}');
+
+    String url = this._getOAuthURL("POST", endPoint);
+    http.Client client = http.Client();
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers[HttpHeaders.contentTypeHeader] =
+    'application/octet-stream';
+    request.headers[HttpHeaders.cacheControlHeader] = "no-cache";
+    request.files.add(await http.MultipartFile.fromPath('file', filePath));
+    String response = await client.send(request).then((res) => res.stream.bytesToString());
+    printToLog('Response POST => $endPoint <= ${response.toString()}');
     var dataResponse = await json.decode(response);
     _handleError(dataResponse);
     return dataResponse;

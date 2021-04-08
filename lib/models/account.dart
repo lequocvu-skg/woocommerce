@@ -26,7 +26,7 @@ class WooAccountRequest {
 @JsonSerializable()
 class WooAccount {
   int id;
-  @JsonKey(name: 'avatarURL')
+  @JsonKey(name: 'user_avatar')
   String avatar;
   @JsonKey(name: 'display_name')
   String fullname;

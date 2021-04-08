@@ -35,10 +35,10 @@ class WooCoupon {
   int id;
   String code;
   String amount;
-  DateTime dateCreated;
-  DateTime dateCreatedGmt;
-  DateTime dateModified;
-  DateTime dateModifiedGmt;
+  dynamic dateCreated;
+  dynamic dateCreatedGmt;
+  dynamic dateModified;
+  dynamic dateModifiedGmt;
   String discountType;
   String description;
   String dateExpires;

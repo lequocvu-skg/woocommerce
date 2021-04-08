@@ -199,53 +199,28 @@ class WooSimpleItemParam {
   Map<String, dynamic> toJson() => _$WooSimpleItemParamToJson(this);
 }
 
+// @JsonSerializable()
+// class WooVariantItemParam {
+//   @JsonKey(name: 'product_id')
+//   String productId;
+//   @JsonKey(name: 'variation_id')
+//   int variationId;
+//   int quantity;
+//
+//   WooVariantItemParam({this.productId, this.variationId, this.quantity});
+//
+//   factory WooVariantItemParam.fromJson(Map<String, dynamic> json) =>
+//       _$WooVariantItemParamFromJson(json);
+//   Map<String, dynamic> toJson() => _$WooVariantItemParamToJson(this);
+// }
+
 @JsonSerializable()
-class WooVariantItemParam {
+class LineItemPayLoad {
   @JsonKey(name: 'product_id')
-  String productId;
+  int productId;
   @JsonKey(name: 'variation_id')
   int variationId;
   int quantity;
-
-  WooVariantItemParam({this.productId, this.variationId, this.quantity});
-
-  factory WooVariantItemParam.fromJson(Map<String, dynamic> json) =>
-      _$WooVariantItemParamFromJson(json);
-  Map<String, dynamic> toJson() => _$WooVariantItemParamToJson(this);
-}
-
-@JsonSerializable()
-class WooSimpleLineItem extends LineItems {
-  @JsonKey(name: 'product_type')
-  bool productType;
-  Map<String, dynamic> variation;
-
-  WooSimpleLineItem({
-    int productId,
-    String name,
-    int variationId,
-    String taxClass,
-    String subtotal,
-    String total,
-    int quantity,
-    this.productType, this.variation}): super(
-      productId: productId,
-      name: name,
-      variationId: variationId,
-      taxClass: taxClass,
-      subtotal: subtotal,
-      total: total,
-      quantity: quantity);
-
-  // WooSimpleLineItem({this.productType, this.productId, this.quantity});
-
-  factory WooSimpleLineItem.fromJson(Map<String, dynamic> json) =>
-      _$WooSimpleLineItemFromJson(json);
-  Map<String, dynamic> toJson() => _$WooSimpleLineItemToJson(this);
-}
-
-@JsonSerializable()
-class WooBookableLineItem extends LineItems {
   @JsonKey(name: 'product_type')
   bool productType;
   @JsonKey(name: 'wc_bookings_field_duration')
@@ -255,32 +230,80 @@ class WooBookableLineItem extends LineItems {
   @JsonKey(name: "wc_bookings_field_start_date_local_timezone")
   String wcStartDateTimeZone;
 
-  WooBookableLineItem({
-    int productId,
-    String name,
-    int variationId,
-    String taxClass,
-    String subtotal,
-    String total,
-    int quantity,
-    this.productType,
-    this.wcBookingDuration,
-    this.wcStartDateTime,
-    this.wcStartDateTimeZone
-  }) : super(
-      productId: productId,
-      name: name,
-      variationId: variationId,
-      taxClass: taxClass,
-      subtotal: subtotal,
-      total: total,
-      quantity: quantity
-  );
+  LineItemPayLoad({this.productId, this.variationId, this.quantity, this.productType, this.wcBookingDuration,
+    this.wcStartDateTime, this.wcStartDateTimeZone});
 
-  factory WooBookableLineItem.fromJson(Map<String, dynamic> json) =>
-      _$WooBookableLineItemFromJson(json);
-  Map<String, dynamic> toJson() => _$WooBookableLineItemToJson(this);
+  factory LineItemPayLoad.fromJson(Map<String, dynamic> json) =>
+      _$LineItemPayLoadFromJson(json);
+  Map<String, dynamic> toJson() => _$LineItemPayLoadToJson(this);
 }
+
+// @JsonSerializable()
+// class WooSimpleLineItem extends LineItems {
+//   Map<String, dynamic> variation;
+//
+//   WooSimpleLineItem({
+//     int productId,
+//     String name,
+//     int variationId,
+//     String taxClass,
+//     String subtotal,
+//     String total,
+//     int quantity,
+//     String productType,
+//     this.variation}): super(
+//       productType: productType,
+//       productId: productId,
+//       name: name,
+//       variationId: variationId,
+//       taxClass: taxClass,
+//       subtotal: subtotal,
+//       total: total,
+//       quantity: quantity);
+//
+//   // WooSimpleLineItem({this.productType, this.productId, this.quantity});
+//
+//   factory WooSimpleLineItem.fromJson(Map<String, dynamic> json) =>
+//       _$WooSimpleLineItemFromJson(json);
+//   Map<String, dynamic> toJson() => _$WooSimpleLineItemToJson(this);
+// }
+//
+// @JsonSerializable()
+// class WooBookableLineItem extends LineItems {
+//   @JsonKey(name: 'wc_bookings_field_duration')
+//   int wcBookingDuration;
+//   @JsonKey(name: "wc_bookings_field_start_date_time")
+//   String wcStartDateTime;
+//   @JsonKey(name: "wc_bookings_field_start_date_local_timezone")
+//   String wcStartDateTimeZone;
+//
+//   WooBookableLineItem({
+//     int productId,
+//     String name,
+//     int variationId,
+//     String taxClass,
+//     String subtotal,
+//     String total,
+//     int quantity,
+//     bool productType,
+//     this.wcBookingDuration,
+//     this.wcStartDateTime,
+//     this.wcStartDateTimeZone
+//   }) : super(
+//       productType: productType,
+//       productId: productId,
+//       name: name,
+//       variationId: variationId,
+//       taxClass: taxClass,
+//       subtotal: subtotal,
+//       total: total,
+//       quantity: quantity
+//   );
+//
+//   factory WooBookableLineItem.fromJson(Map<String, dynamic> json) =>
+//       _$WooBookableLineItemFromJson(json);
+//   Map<String, dynamic> toJson() => _$WooBookableLineItemToJson(this);
+// }
 
 @JsonSerializable()
 class WooUpdateCartItemParam {

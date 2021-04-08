@@ -34,6 +34,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:woocommerce/utilities/extension_utils.dart';
 
+import 'cart.dart';
 import 'order.dart';
 
 // part 'order_payload.g.dart';
@@ -52,7 +53,7 @@ class WooOrderPayload {
   List<WooOrderPayloadCouponLines> couponLines;
   WooOrderPayloadBilling billing;
   WooOrderPayloadShipping shipping;
-  List<LineItems> lineItems;
+  List<LineItemPayLoad> lineItems;
   List<ShippingLines> shippingLines;
 
   WooOrderPayload(
@@ -105,9 +106,9 @@ class WooOrderPayload {
         ? new WooOrderPayloadShipping.fromJson(json['shipping'])
         : null;
     if (json['line_items'] != null) {
-      lineItems = new List<LineItems>();
+      lineItems = new List<LineItemPayLoad>();
       json['line_items'].forEach((v) {
-        lineItems.add(new LineItems.fromJson(v));
+        lineItems.add(new LineItemPayLoad.fromJson(v));
       });
     }
     if (json['shipping_lines'] != null) {

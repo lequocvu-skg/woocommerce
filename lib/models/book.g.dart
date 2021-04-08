@@ -44,3 +44,44 @@ Map<String, dynamic> _$SlotToJson(Slot instance) => <String, dynamic>{
       'booked': instance.booked,
       'product_id': instance.productId,
     };
+
+WooBooking _$WooBookingFromJson(Map<String, dynamic> json) {
+  return WooBooking(
+    id: json['id'] as int,
+    allDay: json['all_day'] as bool,
+    cost: json['cost'] as String,
+    customerId: json['customer_id'] as int,
+    dateCreated: json['date_created'] as int,
+    dateModified: json['date_modified'] as int,
+    start: json['start'] as int,
+    end: json['end'] as int,
+    resourceId: json['resource_id'] as int,
+    orderId: json['order_id'] as int,
+    orderItemId: json['order_item_id'] as int,
+    googleCalendarEventId: json['google_calendar_event_id'] as String,
+    productId: json['product_id'] as int,
+    status: json['status'] as String,
+    localTimeZone: json['local_timezone'] as String,
+    links: json['_links'],
+  );
+}
+
+Map<String, dynamic> _$WooBookingToJson(WooBooking instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'all_day': instance.allDay,
+      'cost': instance.cost,
+      'customer_id': instance.customerId,
+      'date_created': instance.dateCreated,
+      'date_modified': instance.dateModified,
+      'start': instance.start,
+      'end': instance.end,
+      'resource_id': instance.resourceId,
+      'order_id': instance.orderId,
+      'order_item_id': instance.orderItemId,
+      'google_calendar_event_id': instance.googleCalendarEventId,
+      'product_id': instance.productId,
+      'status': instance.status,
+      'local_timezone': instance.localTimeZone,
+      '_links': instance.links,
+    };
