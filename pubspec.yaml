@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl:
   json_annotation: ^3.1.0
   http: ^0.12.1
   crypto: ^2.1.3

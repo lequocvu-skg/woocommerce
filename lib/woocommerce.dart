@@ -1344,7 +1344,7 @@ class WooCommerce {
     final response = await get(queryUri.toString());
     var wooResponse = WooBaseResponse.fromJson(response);
     if (wooResponse.code == 'ft_get_order_ok') {
-      return (wooResponse.data['data'] as List).map((e) => WooOrder.fromJson(e)).toList();
+      return (wooResponse.data['data']['data'] as List).map((e) => WooOrder.fromJson(e)).toList();
     } else {
       WooCommerceError err =
       WooCommerceError.fromJson(response);

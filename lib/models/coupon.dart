@@ -30,6 +30,7 @@
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
+import 'package:intl/intl.dart';
 
 class WooCoupon {
   int id;
@@ -157,6 +158,11 @@ class WooCoupon {
     return data;
   }
   @override toString() => this.toJson().toString();
+
+  String get expiredDateFormat {
+    if (dateExpires == null || dateExpires.isEmpty) return null;
+    return DateFormat('dd/MM/yyyy').format(DateTime.parse(dateExpires));
+  }
 }
 
 class WooCouponLinks {
