@@ -500,7 +500,7 @@ class Shipping {
 class MetaData {
   int id;
   String key;
-  String value;
+  dynamic value;
   String displayKey;
   String displayValue;
 

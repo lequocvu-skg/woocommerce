@@ -445,7 +445,9 @@ class WooCommerce {
       'exclude': exclude,
       'include': include != null ? Uri.encodeComponent(include) : include,
       'offset': offset,
-      'order': order, 'orderby': orderBy, 'parent': parent,
+      'order': order ?? 'asc',
+      'orderby': orderBy ?? 'menu_order',
+      'parent': parent,
       'parent_exclude': parentExclude, 'slug': slug,
       'status': status, 'type': type, 'sku': sku,
       'featured': featured,
@@ -480,7 +482,7 @@ class WooCommerce {
   /// Returns a [WooProduct], with the specified [id].
   Future<WooProduct>getProductById({@required int id}) async{
     WooProduct product;
-    setApiResourceUrl(path: 'products/'+id.toString(),);
+    setApiResourceUrl(path: 'products/'+id.toString());
     final response = await get(queryUri.toString());
     product = WooProduct.fromJson(response);
     return product;
@@ -891,6 +893,22 @@ class WooCommerce {
     printToLog('response gotten : '+response.toString());
     productReview = WooProductReview.fromJson(response);
     return productReview;
+  }
+
+
+  Future<bool> updateProductsOrder({@required List<int> productIds}) async {
+    Map<String, dynamic> data = {
+      "product_ids": productIds
+    };
+    setApiResourceUrl(path: 'product/update-menu-order', hostType: HostType.CUSTOM);
+    final response = await put(queryUri.toString(), data);
+    var wooRes = WooBaseResponse.fromJson(response);
+    if (wooRes?.code == 'OK'
+        || wooRes?.code == 'ft_update_ordering_ok') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /// Updates an existing Product Review and returns the [WooProductReview] object.
@@ -1345,6 +1363,8 @@ class WooCommerce {
     var wooResponse = WooBaseResponse.fromJson(response);
     if (wooResponse.code == 'ft_get_order_ok') {
       return (wooResponse.data['data']['data'] as List).map((e) => WooOrder.fromJson(e)).toList();
+    } else if (wooResponse.code == 'ft_get_order_empty') {
+      return [];
     } else {
       WooCommerceError err =
       WooCommerceError.fromJson(response);
